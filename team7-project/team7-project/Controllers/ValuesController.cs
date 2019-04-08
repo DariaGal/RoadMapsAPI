@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 
 namespace team7_project.Controllers
 {
@@ -19,9 +20,13 @@ namespace team7_project.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Tree> Get(int id)
         {
-            return "value";
+            var client = new MongoClient("mongodb+srv://veselova:<cdznjqbcnjxybr>@clusterteam7-hb7ef.azure.mongodb.net/test?retryWrites=true");
+            var database = client.GetDatabase("team7db");
+            var trees = database.GetCollection<Tree>("trees");
+            var tree = trees.Find(t => t.Name == "backend c#").ToList();
+            return Ok(tree);
         }
 
         // POST api/values
