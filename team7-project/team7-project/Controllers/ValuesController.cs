@@ -34,13 +34,13 @@ namespace team7_project.Controllers
 
         // POST api/values
         [HttpPost]
-        public ActionResult<string>Post([FromBody] string value)
+        public ActionResult Post([FromBody] Hehe value)
         {
-            if (value == null)
+            if (value.Value == null)
             {
-                return BadRequest("oops, try to add some string in body");
+                return BadRequest("oops, try { \"Value\" : \"write smth\"}");
             }
-            return Ok("you send string: " + value);
+            return Ok("you send string: " + value.Value);
         }
 
         // PUT api/values/5
@@ -54,5 +54,10 @@ namespace team7_project.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class Hehe
+    {
+        public string Value { get; set; }
     }
 }
