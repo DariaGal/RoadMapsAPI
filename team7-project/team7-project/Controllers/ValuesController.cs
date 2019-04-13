@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Authorization;
 using MongoDB.Driver;
 
 namespace team7_project.Controllers
@@ -19,6 +21,7 @@ namespace team7_project.Controllers
         }
 
         // GET api/values/5
+        [Authorize]
         [HttpGet("{id}")]
         public ActionResult<Tree> Get(int id)
         {
@@ -31,8 +34,13 @@ namespace team7_project.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<string>Post([FromBody] string value)
         {
+            if (value == null)
+            {
+                return BadRequest("oops, try to add some string in body");
+            }
+            return Ok("you send string: " + value);
         }
 
         // PUT api/values/5
