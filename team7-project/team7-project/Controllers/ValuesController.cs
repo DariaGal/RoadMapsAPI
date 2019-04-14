@@ -21,16 +21,15 @@ namespace team7_project.Controllers
         }
 
         // GET api/values/5
-        [Authorize]
         [HttpGet("{id}")]
-        public ActionResult<Tree> Get(int id)
+        public ActionResult<string> Get(int id)
         {
-            var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_mongoDB");
-            var client = new MongoClient(connectionString);
+            var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_mongoDB", EnvironmentVariableTarget.Process);
+           /* var client = new MongoClient(connectionString);
             var database = client.GetDatabase("team7db");
             var trees = database.GetCollection<Tree>("trees");
-            var tree = trees.Find(t => true).ToList();
-            return Ok(tree);
+            var tree = trees.Find(t => true).ToList();*/
+            return Ok(connectionString);
         }
 
         // POST api/values
