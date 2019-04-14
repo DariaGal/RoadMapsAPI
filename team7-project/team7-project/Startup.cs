@@ -28,8 +28,8 @@ namespace team7_project
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {           
-            var signingKey = new SigningSymmetricKey("123466ffdddmdj543");
+        {
+            var signingKey = new SigningSymmetricKey(Environment.GetEnvironmentVariable("AUTH_KEY", EnvironmentVariableTarget.Process));
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
 
             services.AddScoped<IUserService, UserService>();
