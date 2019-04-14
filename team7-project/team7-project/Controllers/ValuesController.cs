@@ -25,7 +25,8 @@ namespace team7_project.Controllers
         [HttpGet("{id}")]
         public ActionResult<Tree> Get(int id)
         {
-            var client = new MongoClient("mongodb+srv://admin:cdznjqbcnjxybr@clusterteam7-hb7ef.azure.mongodb.net/test?retryWrites=true");
+            var connectionString = Environment.GetEnvironmentVariable("CUSTOMCONNSTR_mongoDB");
+            var client = new MongoClient(connectionString);
             var database = client.GetDatabase("team7db");
             var trees = database.GetCollection<Tree>("trees");
             var tree = trees.Find(t => true).ToList();
