@@ -17,7 +17,7 @@ namespace team7_project.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "hello", "world" };
+            return new string[] { "hello", "world,", "welcome!" };
         }
 
         // GET api/values/5
