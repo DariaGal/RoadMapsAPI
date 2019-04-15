@@ -7,7 +7,7 @@ namespace team7_project.Auth
 {
     public class AuthTokenAnswer
     {
-        public string Login { get; set; }
+        //public string Login { get; set; }
 
         public string AccessToken { get; set; }
     }

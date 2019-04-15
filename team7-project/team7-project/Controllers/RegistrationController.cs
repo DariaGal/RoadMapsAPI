@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +10,13 @@ using Models.Converters.Users;
 using Models.Converters.Users.Models.Converters.Users;
 using Models.Users;
 using Models.Users.Services;
+using team7_project.Auth;
+using team7_project.Auth.Tokens;
 using team7_project.Errors;
 
 namespace team7_project.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth/signup")]
     public class RegistrationController : Controller
     {
         private readonly IUserService users;
@@ -23,7 +27,7 @@ namespace team7_project.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] Client.Models.Users.UserRegistrationInfo registrationInfo, CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterUser([FromBody] Client.Models.Users.UserRegistrationInfo registrationInfo, [FromServices] IJwtSigningEncodingKey signingEncodingKey, CancellationToken cancellationToken)
         {
             if (registrationInfo == null)
             {
@@ -52,7 +56,19 @@ namespace team7_project.Controllers
 
             var clientUser = UserConverter.Convert(user);
 
-            return Ok(clientUser);
+            var claims = new Claim[]
+{
+                new Claim(ClaimTypes.Name, clientUser.Login),
+
+                new Claim(ClaimTypes.NameIdentifier, clientUser.Id),
+};
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
+
+            return Ok(new AuthTokenAnswer
+            {
+                AccessToken = encodedJwt
+            });
         }
     }
 }

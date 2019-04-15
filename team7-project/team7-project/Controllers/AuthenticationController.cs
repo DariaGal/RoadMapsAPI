@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace team7_project.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth/signin")]
     [ApiController]
     public class AuthenticationController : Controller
     {
@@ -65,17 +65,12 @@ namespace team7_project.Controllers
                 new Claim(ClaimTypes.NameIdentifier, clientUser.Id),
         };
 
-            var token = new JwtSecurityToken(
-                //issuer: "team7_projectApp",
-                //audience: "team7_projectClient",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(AuthOptions.LIFETIME),
-                signingCredentials: new SigningCredentials(signingEncodingKey.GetKey(), signingEncodingKey.SigningAlgorithm)
-            );
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
 
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return Ok(encodedJwt);
+            return Ok(new AuthTokenAnswer
+            {
+                AccessToken = encodedJwt
+            });
         }
     }
 }
