@@ -27,7 +27,7 @@ namespace Models.Trees.Services
             cancellationToken.ThrowIfCancellationRequested();
 
             var projection = Builders<Tree>.Projection.Include("Title");
-            var result = trees.Find(Builders<Tree>.Filter.Empty).Project(projection).ToJson();
+            var result = trees.Find(Builders<Tree>.Filter.Empty).Project(projection).ToList().ToJson();
 
             var treeInfoList = BsonSerializer.Deserialize<List<TreeInfo>>(result);
             

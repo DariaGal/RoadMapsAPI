@@ -46,6 +46,17 @@ namespace team7_project.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetTreeAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var info = await trees.GetAllAsync(cancellationToken);
+
+            return Ok(info);
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> CreateTreeAsync(CancellationToken cancellationToken)
