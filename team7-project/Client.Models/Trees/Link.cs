@@ -1,9 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Models.Trees
+namespace Client.Models.Trees
 {
     /// <summary>
     /// Связь узлов дерева
@@ -13,19 +12,16 @@ namespace Models.Trees
         /// <summary>
         /// Идетификатор узла источника
         /// </summary>
-        [BsonElement("SourceId")]
         public string SourceId { get; set; }
 
         /// <summary>
         /// Идетификатор целевого узла
         /// </summary>
-        [BsonElement("TargetId")]
         public string TargetId { get; set; }
 
         /// <summary>
         /// Тип связи
         /// </summary>
-        [BsonElement("Type")]
         public string Type { get; set; }
     }
 }

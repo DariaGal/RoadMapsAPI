@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Models.Trees.Services;
 using Models.Users.Services;
 using team7_project.Auth;
 using team7_project.Auth.Tokens;
@@ -33,6 +34,7 @@ namespace team7_project
             services.AddSingleton<IJwtSigningEncodingKey>(signingKey);
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITreeService, TreeService>();
 
             var signingDecodingKey = (IJwtSigningDecodingKey)signingKey;
 

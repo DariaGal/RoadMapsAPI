@@ -10,5 +10,6 @@ namespace Models.Trees.Services
     {
         Task<Tree> GetAsync(string id, CancellationToken cancellationToken);
         Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken);
+        Task CreateAsync(Tree tree, CancellationToken cancellationToken);
     }
 }

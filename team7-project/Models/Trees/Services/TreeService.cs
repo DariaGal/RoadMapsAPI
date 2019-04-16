@@ -53,5 +53,17 @@ namespace Models.Trees.Services
 
             return Task.FromResult(tree);
         }
+
+        public Task CreateAsync(Tree tree, CancellationToken cancellationToken)
+        {
+            if (tree == null)
+            {
+                throw new ArgumentNullException(nameof(tree));
+            }
+
+            trees.InsertOne(tree);
+
+            return Task.CompletedTask;
+        }
     }
 }

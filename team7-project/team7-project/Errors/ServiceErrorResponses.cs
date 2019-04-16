@@ -76,5 +76,20 @@ namespace team7_project.Errors
             };
             return error;
         }
+
+        public static ServiceErrorResponse TreeNotFound(string id)
+        {
+            var error = new ServiceErrorResponse
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Error = new ServiceError
+                {
+                    Code = ServiceErrorCodes.BadRequest,
+                    Message = $"There is no tree with id: \"{id}\"",
+                    Target = "tree"
+                }
+            };
+            return error;
+        }
     }
 }
