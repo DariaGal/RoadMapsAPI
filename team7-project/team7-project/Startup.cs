@@ -40,6 +40,7 @@ namespace team7_project
 
             services
                 .AddAuthentication()
+                .AddCookie(cfg => cfg.SlidingExpiration = true)
                 .AddJwtBearer(options =>
                 {
                     //jwtBearerOptions.SaveToken = true;
