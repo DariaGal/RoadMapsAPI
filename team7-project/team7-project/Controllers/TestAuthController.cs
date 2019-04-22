@@ -16,7 +16,13 @@ namespace team7_project.Controllers
 
     public class TestAuthController : Controller
     {
+        /// <summary>
+        /// Проверка работы аутентификации
+        /// </summary>   
+        /// <returns>Строку приветствия пользователя</returns>
+        /// <response code="201">Возвращает строку приветствия пользователя</response>
         [HttpGet]
+        [ProducesResponseType(typeof(string),201)]
         //[Route("{taskId}", Name = "GetTaskRouteV2")]
         public async Task<IActionResult> GetTaskAsync(CancellationToken cancellationToken)
         {

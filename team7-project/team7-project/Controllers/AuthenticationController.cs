@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace team7_project.Controllers
 {
+    [Produces("application/json")]
     [Route("api/auth/signin")]
     [ApiController]
     public class AuthenticationController : Controller
@@ -28,9 +29,36 @@ namespace team7_project.Controllers
             this.users = users;
         }
 
+
+        /// <summary>
+        /// Вход
+        /// </summary>        
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /userInfo
+        ///     {
+        ///        "Login": "user1",
+        ///        "Password": "1234"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="userInfo"> </param> 
+        /// <returns>Токен</returns>
+        /// <response code="201">Возвращает токен</response>
+        /// <response code="400">Если userInfo == null 
+        /// Если пароль или логин отсутствует 
+        /// Если пользователя не существует
+        /// </response>   
+
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> GenerateToken([FromBody]Client.Models.Users.UserRegistrationInfo userInfo, [FromServices] IJwtSigningEncodingKey signingEncodingKey, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(AuthTokenAnswer),201)]
+        [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
+        public async Task<IActionResult> GenerateToken(
+            [FromBody]Client.Models.Users.UserRegistrationInfo userInfo,
+            [FromServices] IJwtSigningEncodingKey signingEncodingKey,
+            CancellationToken cancellationToken)
         {
             if (userInfo == null)
             {
@@ -66,6 +94,7 @@ namespace team7_project.Controllers
         };
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
+
 
             return Ok(new AuthTokenAnswer
             {

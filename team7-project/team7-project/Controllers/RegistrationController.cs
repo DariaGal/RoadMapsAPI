@@ -16,6 +16,7 @@ using team7_project.Errors;
 
 namespace team7_project.Controllers
 {
+    [Produces("application/json")]
     [Route("api/auth/signup")]
     public class RegistrationController : Controller
     {
@@ -26,7 +27,28 @@ namespace team7_project.Controllers
             this.users = users;
         }
 
+        /// <summary>
+        /// Регистрация
+        /// </summary>        
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /registrationInfo
+        ///     {
+        ///        "Login": "user1",
+        ///        "Password": "1234"
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="registrationInfo"> </param> 
+        /// <returns>Токен</returns>
+        /// <response code="201">Возвращает токен</response>
+        /// <response code="400">Если userInfo == null
+        /// Если пароль или логин отсутствует 
+        /// Если пользователь уже существует</response> 
         [HttpPost]
+        [ProducesResponseType(typeof(AuthTokenAnswer), 201)]
+        [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
         public async Task<IActionResult> RegisterUser([FromBody] Client.Models.Users.UserRegistrationInfo registrationInfo, [FromServices] IJwtSigningEncodingKey signingEncodingKey, CancellationToken cancellationToken)
         {
             if (registrationInfo == null)
@@ -64,7 +86,7 @@ namespace team7_project.Controllers
 };
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
-
+            
             return Ok(new AuthTokenAnswer
             {
                 AccessToken = encodedJwt

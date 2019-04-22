@@ -54,16 +54,26 @@ namespace Models.Trees.Services
             return Task.FromResult(tree);
         }
 
-        public Task CreateAsync(Tree tree, CancellationToken cancellationToken)
+        public Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, CancellationToken cancellationToken)
         {
-            if (tree == null)
+            if (creationInfo == null)
             {
-                throw new ArgumentNullException(nameof(tree));
+                throw new ArgumentNullException(nameof(creationInfo));
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var tree = new Tree
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = creationInfo.Title,
+                Links = creationInfo.Links,
+                Nodes = creationInfo.Nodes
+            };
+            
             trees.InsertOne(tree);
 
-            return Task.CompletedTask;
+            return Task.FromResult(tree.Id);
         }
     }
 }
