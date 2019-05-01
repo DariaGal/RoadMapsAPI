@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using team7_project.Auth;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 
 namespace team7_project.Controllers
 {
@@ -36,7 +37,7 @@ namespace team7_project.Controllers
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /userInfo
+        ///     POST
         ///     {
         ///        "Login": "user1",
         ///        "Password": "1234"
@@ -45,7 +46,7 @@ namespace team7_project.Controllers
         /// </remarks>
         /// <param name="userInfo"> </param> 
         /// <returns>Токен</returns>
-        /// <response code="201">Возвращает токен</response>
+        /// <response code="200">Возвращает токен</response>
         /// <response code="400">Если userInfo == null 
         /// Если пароль или логин отсутствует 
         /// Если пользователя не существует
@@ -53,7 +54,7 @@ namespace team7_project.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [ProducesResponseType(typeof(AuthTokenAnswer),201)]
+        [ProducesResponseType(typeof(AuthTokenAnswer), 200)]
         [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
         public async Task<IActionResult> GenerateToken(
             [FromBody]Client.Models.Users.UserRegistrationInfo userInfo,
@@ -88,13 +89,18 @@ namespace team7_project.Controllers
 
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name, clientUser.Login),
+                new Claim("Name", clientUser.Login),
 
-                new Claim(ClaimTypes.NameIdentifier, clientUser.Id),
+                new Claim("Id", clientUser.Id),
         };
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
 
+            Response.Cookies.Append(
+                "auth",
+                new AuthTokenAnswer { AccessToken = encodedJwt }.AccessToken,
+                new CookieOptions { HttpOnly = true }
+            );
 
             return Ok(new AuthTokenAnswer
             {

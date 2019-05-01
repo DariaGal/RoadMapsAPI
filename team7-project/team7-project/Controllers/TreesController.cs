@@ -29,7 +29,7 @@ namespace team7_project.Controllers
         /// </summary> 
         /// <param name="treeId"> </param> 
         /// <returns>Дерево</returns>
-        /// <response code="201">Возвращает дерево</response>
+        /// <response code="200">Возвращает дерево</response>
         /// <response code="400">Если дерево по указанному индексу отсутствует</response>  
         [AllowAnonymous]
         [HttpGet]
@@ -60,7 +60,7 @@ namespace team7_project.Controllers
         /// Возвращает список из всех деревьев
         /// </summary>    
         /// <returns>Список информации о деревьях</returns>
-        /// <response code="201">Возвращает список информации о деревьях</response>
+        /// <response code="200">Возвращает список информации о деревьях</response>
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 201)]
@@ -81,7 +81,7 @@ namespace team7_project.Controllers
         /// </remarks>  
         /// <returns>Id дерева</returns>
         /// <response code="201">Возвращает Id созданного дерева</response>
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(string), 201)]
         [Route("create")]

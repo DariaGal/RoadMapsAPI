@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace team7_project.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-
+    [Authorize]
     [Route("api/[controller]")]
 
     public class TestAuthController : Controller
@@ -20,15 +19,15 @@ namespace team7_project.Controllers
         /// Проверка работы аутентификации
         /// </summary>   
         /// <returns>Строку приветствия пользователя</returns>
-        /// <response code="201">Возвращает строку приветствия пользователя</response>
+        /// <response code="200">Возвращает строку приветствия пользователя</response>
         [HttpGet]
-        [ProducesResponseType(typeof(string),201)]
+        [ProducesResponseType(typeof(string),200)]
         //[Route("{taskId}", Name = "GetTaskRouteV2")]
         public async Task<IActionResult> GetTaskAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var userLogin = this.HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value;
+            var userLogin = this.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "Name").Value;
 
 
 

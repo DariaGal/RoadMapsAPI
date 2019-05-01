@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.Converters.Users;
 using Models.Converters.Users.Models.Converters.Users;
@@ -79,14 +80,20 @@ namespace team7_project.Controllers
             var clientUser = UserConverter.Convert(user);
 
             var claims = new Claim[]
-{
-                new Claim(ClaimTypes.Name, clientUser.Login),
+             {
+                new Claim("Name", clientUser.Login),
 
-                new Claim(ClaimTypes.NameIdentifier, clientUser.Id),
-};
+                new Claim("Id", clientUser.Id),
+             };
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
-            
+
+            Response.Cookies.Append(
+                "auth",
+                new AuthTokenAnswer { AccessToken = encodedJwt }.AccessToken,
+                new CookieOptions { HttpOnly = true }
+            );
+
             return Ok(new AuthTokenAnswer
             {
                 AccessToken = encodedJwt

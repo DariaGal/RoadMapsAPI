@@ -106,7 +106,8 @@ namespace team7_project
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Skill Map API V1");
                 });
 
-                app.UseAuthentication();
+                //app.UseAuthentication();
+                app.UseMiddleware<AuthMiddleware>();
                 app.UseHttpsRedirection();
                 app.UseMvc();
             }
