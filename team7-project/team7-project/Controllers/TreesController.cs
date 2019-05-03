@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace team7_project.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/trees")]
     public class TreesController : Controller
     {
         private readonly ITreeService trees;
@@ -33,7 +33,7 @@ namespace team7_project.Controllers
         /// <response code="400">Если дерево по указанному индексу отсутствует</response>  
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(Client.Models.Trees.Tree),201)]
+        [ProducesResponseType(typeof(Client.Models.Trees.Tree), 201)]
         [ProducesResponseType(400)]
         [Route("{treeId}", Name = "GetTreeRoute")]
         public async Task<IActionResult> GetTreeAsync([FromRoute] string treeId, CancellationToken cancellationToken)
@@ -75,10 +75,8 @@ namespace team7_project.Controllers
 
         /// <summary>
         /// Создание дерева
-        /// </summary>     
-        /// <remarks>
-        /// В процессе разработки
-        /// </remarks>  
+        /// </summary>  
+        /// <param name="treeCreationInfo"> </param> 
         /// <returns>Id дерева</returns>
         /// <response code="201">Возвращает Id созданного дерева</response>
         [Authorize]
@@ -87,10 +85,25 @@ namespace team7_project.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateTreeAsync([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
         {
-            Models.Trees.TreeCreationInfo tree = null;
+            var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
             var treeId = await trees.CreateAsync(tree, cancellationToken);
 
-            return Ok(treeId);
+            var routeParams = new Dictionary<string, object>
+            {
+                { "treeId", treeId }
+            };
+
+            return CreatedAtRoute("GetTaskRoute", routeParams, treeId);
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("add")]
+        public async Task<IActionResult> CreateTreeAsync([FromQuery] string treeId,CancellationToken cancellationToken)
+        {
+            var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
+            await trees.AppendTreeToUser(userId, treeId, cancellationToken);
+            return Ok();
         }
     }
 }

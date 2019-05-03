@@ -25,5 +25,23 @@ namespace Models.Converters.Trees
 
             return clientLink;
         }
+
+
+        public static Model.Link Convert(Client.Link clientLink)
+        {
+            if (clientLink == null)
+            {
+                throw new ArgumentNullException(nameof(clientLink));
+            }
+
+            var link = new Model.Link
+            {
+                SourceId = clientLink.SourceId,
+                TargetId = clientLink.TargetId,
+                Type = clientLink.Type
+            };
+
+            return link;
+        }
     }
 }

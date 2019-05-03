@@ -27,5 +27,24 @@ namespace Models.Converters.Trees
 
             return clientNode;
         }
+
+        public static Model.Node Convert(Client.Node clientNode)
+        {
+            if (clientNode == null)
+            {
+                throw new ArgumentNullException(nameof(clientNode));
+            }
+
+            var node = new Model.Node
+            {
+                Id = clientNode.Id,
+                Text = clientNode.Text,
+                Type = clientNode.Type,
+                X = clientNode.X,
+                Y = clientNode.Y
+            };
+
+            return node;
+        }
     }
 }
