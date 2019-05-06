@@ -98,8 +98,8 @@ namespace team7_project.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("add")]
-        public async Task<IActionResult> CreateTreeAsync([FromQuery] string treeId,CancellationToken cancellationToken)
+        [Route("{treeID}/add")]
+        public async Task<IActionResult> AddTreeToUserAsync([FromRoute] string treeId,CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
             await trees.AppendTreeToUser(userId, treeId, cancellationToken);

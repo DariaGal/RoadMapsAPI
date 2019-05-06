@@ -14,7 +14,7 @@ namespace Models.Trees.Services
     public class TreeService : ITreeService
     {
         private readonly IMongoCollection<Tree> trees;
-        private readonly IMongoCollection<UserTrees> userTrees;
+        private readonly IMongoCollection<UserTreesCheck> userTreesCheck;
 
         public TreeService(IConfiguration config)
         {
@@ -22,7 +22,7 @@ namespace Models.Trees.Services
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase("team7db");
             trees = database.GetCollection<Tree>("Trees");
-            userTrees = database.GetCollection<UserTrees>("UserTrees");
+            userTreesCheck = database.GetCollection<UserTreesCheck>("UserTrees");
         }
 
         public Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken)
@@ -81,28 +81,33 @@ namespace Models.Trees.Services
 
         public async Task AppendTreeToUser(Guid userId, string treeId, CancellationToken cancellationToken)
         {
-            var filter = Builders<UserTrees>.Filter.Eq(x => x.UserId, userId);
+            var filter = Builders<UserTreesCheck>.Filter.Eq(x => x.UserId, userId);
 
-            var findResult = await userTrees.FindAsync(filter);
+            var findResult = await userTreesCheck.FindAsync(filter);
             var user = await findResult.FirstOrDefaultAsync();
             if (user == null)
             {
-                var uTree = new UserTrees
+                var uTree = new UserTreesCheck
                 {
                     UserId = userId,
                     TreeCkeck = new List<TreeCheckInfo>()
                 };
 
-                await userTrees.InsertOneAsync(uTree, cancellationToken: cancellationToken);
+                await userTreesCheck.InsertOneAsync(uTree, cancellationToken: cancellationToken);
             }
 
-            var update = Builders<UserTrees>.Update.AddToSet(
+            var update = Builders<UserTreesCheck>.Update.AddToSet(
                 x => x.TreeCkeck,
                 new TreeCheckInfo { Id = treeId, CheckedNodes = new List<string>() }
             );
 
-            var u = await userTrees.FindOneAndUpdateAsync(filter, update);
+            var u = await userTreesCheck.FindOneAndUpdateAsync(filter, update);
             return;
+        }
+
+        public async Task GetUserTreesAsync(Guid userId, CancellationToken cancellationToken)
+        {
+
         }
     }
 }
