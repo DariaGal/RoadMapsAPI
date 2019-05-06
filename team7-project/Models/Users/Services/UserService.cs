@@ -48,7 +48,7 @@ namespace Models.Users.Services
 
             InsertOneOptions options = null;
             await users.InsertOneAsync(user, options, cancellationToken);
-            return await Task.FromResult(user);
+            return user;
         }
 
         public async Task<User> GetAsync(Guid userId, CancellationToken cancellationToken)

@@ -53,7 +53,9 @@ namespace team7_project.Controllers
 
             var clientTree = TreeConverter.Convert(tree);
 
-            return Ok(clientTree);
+            var clientTreeOutIndo = new Client.Models.Trees.TreeOutInfo(clientTree);
+
+            return Ok(clientTreeOutIndo);
         }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace team7_project.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 201)]
-        public async Task<IActionResult> GetTreeAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllTreesAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

@@ -25,38 +25,6 @@ namespace Models.Trees.Services
             userTrees = database.GetCollection<UserTrees>("UserTrees");
         }
 
-        public Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var projection = Builders<Tree>.Projection.Include("Title");
-            var result = trees.Find(Builders<Tree>.Filter.Empty).Project(projection).ToList().ToJson();
-
-            var treeInfoList = BsonSerializer.Deserialize<List<TreeInfo>>(result);
-
-            return Task.FromResult<IReadOnlyList<TreeInfo>>(treeInfoList);
-        }
-
-        public Task<Tree> GetAsync(string id, CancellationToken cancellationToken)
-        {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var treeFound = trees.Find(x => x.Id == id);
-            var tree = treeFound.FirstOrDefault();
-
-            if (tree == null)
-            {
-                throw new TreeNotFoundException(id);
-            }
-
-            return Task.FromResult(tree);
-        }
-
         public async Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, CancellationToken cancellationToken)
         {
             if (creationInfo == null)
@@ -79,8 +47,46 @@ namespace Models.Trees.Services
             InsertOneOptions options = null;
             await trees.InsertOneAsync(tree, options, cancellationToken);
 
-            return await Task.FromResult(tree.Id);
+            return tree.Id;
         }
+
+
+        public async Task<Tree> GetAsync(string id, CancellationToken cancellationToken)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var findResults = await trees.FindAsync(t => t.Id == id, cancellationToken: cancellationToken);
+            var tree = await findResults.FirstOrDefaultAsync(cancellationToken);
+
+            if (tree == null)
+            {
+                throw new TreeNotFoundException(id);
+            }
+
+            return tree;
+        }
+
+
+        public Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var projection = Builders<Tree>.Projection.Include("Title");
+            var result = trees.Find(Builders<Tree>.Filter.Empty).Project(projection).ToList().ToJson();
+
+            var treeInfoList = BsonSerializer.Deserialize<List<TreeInfo>>(result);
+
+            return Task.FromResult<IReadOnlyList<TreeInfo>>(treeInfoList);
+        }
+
+
+
+
 
         public async Task AppendTreeToUser(Guid userId, string treeId, CancellationToken cancellationToken)
         {
