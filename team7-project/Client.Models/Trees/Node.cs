@@ -30,8 +30,13 @@ namespace Client.Models.Trees
         public double Y { get; set; }
 
         /// <summary>
-        /// Тип узла
+        /// Цвет узла
         /// </summary>
-        public string Type { get; set; }
+        public string Color { get; set; }
+
+        /// <summary>
+        ///Информация об узле и список ссылок
+        /// </summary>
+        public List<NodeDescriptionInfo> Info { get; set; }
     }
 }

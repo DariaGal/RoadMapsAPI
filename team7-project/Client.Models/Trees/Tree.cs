@@ -17,6 +17,16 @@ namespace Client.Models.Trees
         public string Title { get; set; }
 
         /// <summary>
+        /// Описание
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Список тегов
+        /// </summary>
+        public List<string> Tags { get; set; }
+
+        /// <summary>
         /// Список узлов
         /// </summary>
         public List<Node> Nodes { get; set; }

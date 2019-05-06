@@ -85,6 +85,10 @@ namespace team7_project.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateTreeAsync([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
         {
+            //TODO: добавить всяккие проверочки на адекватность данных, но это потом
+
+
+
             var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
             var treeId = await trees.CreateAsync(tree, cancellationToken);
 

@@ -35,9 +35,15 @@ namespace Models.Trees
         public double Y { get; set; }
 
         /// <summary>
-        /// Тип узла
+        /// Цвет узла
         /// </summary>
-        [BsonElement("Type")]
-        public string Type { get; set; }
+        [BsonElement("Color")]
+        public string Color { get; set; }
+
+        /// <summary>
+        ///Информация об узле и список ссылок
+        /// </summary>
+        [BsonElement("Info")]
+        public List<NodeDescriptionInfo> Info { get; set; }
     }
 }

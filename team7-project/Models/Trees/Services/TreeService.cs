@@ -57,7 +57,7 @@ namespace Models.Trees.Services
             return Task.FromResult(tree);
         }
 
-        public Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, CancellationToken cancellationToken)
+        public async Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, CancellationToken cancellationToken)
         {
             if (creationInfo == null)
             {
@@ -70,13 +70,16 @@ namespace Models.Trees.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 Title = creationInfo.Title,
+                Description = creationInfo.Description,
+                Tags = creationInfo.Tags,
                 Links = creationInfo.Links,
                 Nodes = creationInfo.Nodes
             };
 
-            trees.InsertOne(tree);
+            InsertOneOptions options = null;
+            await trees.InsertOneAsync(tree, options, cancellationToken);
 
-            return Task.FromResult(tree.Id);
+            return await Task.FromResult(tree.Id);
         }
 
         public async Task AppendTreeToUser(Guid userId, string treeId, CancellationToken cancellationToken)
