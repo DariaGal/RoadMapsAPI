@@ -48,7 +48,7 @@ namespace team7_project.Controllers
             catch (TreeNotFoundException)
             {
                 var error = ServiceErrorResponses.TreeNotFound(treeId);
-                return BadRequest();
+                return BadRequest(error);
             }
 
             var clientTree = TreeConverter.Convert(tree);
@@ -97,12 +97,21 @@ namespace team7_project.Controllers
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPatch]
         [Route("{treeID}/add")]
         public async Task<IActionResult> AddTreeToUserAsync([FromRoute] string treeId,CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
-            await trees.AppendTreeToUser(userId, treeId, cancellationToken);
+            try
+            {
+                await trees.AppendTreeToUserAsync(userId, treeId, cancellationToken);
+            }
+            catch(TreeNotFoundException)
+            {
+                var error = ServiceErrorResponses.TreeNotFound(treeId);
+                return BadRequest(error);
+            }
+
             return Ok();
         }
     }
