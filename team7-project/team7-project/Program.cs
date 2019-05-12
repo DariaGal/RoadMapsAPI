@@ -14,9 +14,6 @@ namespace team7_project
     {
         public static void Main(string[] args)
         {
-            Environment.SetEnvironmentVariable("CUSTOMCONNSTR_mongoDB", "mongodb+srv://admin:cdznjqbcnjxybr@clusterteam7-hb7ef.azure.mongodb.net/test?retryWrites=true");
-            Environment.SetEnvironmentVariable("AUTH_KEY", "sdfsdfsdfsdfaghh");
-
             CreateWebHostBuilder(args).Build().Run();
         }
 

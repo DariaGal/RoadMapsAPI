@@ -17,18 +17,16 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(node));
             }
 
-            var clientNodeDescriptionInfo = node.Info.Select(x => NodeDescriptionInfoConverter.Convert(x)).ToList();
-
 
 
             var clientNode = new Client.Node
             {
                 Id = node.Id,
-                Title = node.Title,               
+                Title = node.Title,
                 X = node.X,
                 Y = node.Y,
                 Color = node.Color,
-                Info = clientNodeDescriptionInfo
+                Info = NodeDescriptionInfoConverter.Convert(node.Info)
             };
 
             return clientNode;
@@ -41,7 +39,6 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(clientNode));
             }
 
-            var nodeDescriptionInfo = clientNode.Info.Select(x => NodeDescriptionInfoConverter.Convert(x)).ToList();
 
             var node = new Model.Node
             {
@@ -50,7 +47,7 @@ namespace Models.Converters.Trees
                 X = clientNode.X,
                 Y = clientNode.Y,
                 Color = clientNode.Color,
-                Info = nodeDescriptionInfo
+                Info = NodeDescriptionInfoConverter.Convert(clientNode.Info)
             };
 
             return node;

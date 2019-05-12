@@ -94,12 +94,14 @@ namespace team7_project.Controllers
             var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
             var treeId = await trees.CreateAsync(tree, cancellationToken);
 
+            //var clientTree = TreeConverter.Convert(tree);
+
             var routeParams = new Dictionary<string, object>
             {
                 { "treeId", treeId }
             };
 
-            return CreatedAtRoute("GetTaskRoute", routeParams, treeId);
+            return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
         }
 
         [Authorize]

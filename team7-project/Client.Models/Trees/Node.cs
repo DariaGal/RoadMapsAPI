@@ -37,6 +37,6 @@ namespace Client.Models.Trees
         /// <summary>
         ///Информация об узле и список ссылок
         /// </summary>
-        public List<NodeDescriptionInfo> Info { get; set; }
+        public NodeDescriptionInfo Info { get; set; }
     }
 }

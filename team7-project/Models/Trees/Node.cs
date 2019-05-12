@@ -44,6 +44,6 @@ namespace Models.Trees
         ///Информация об узле и список ссылок
         /// </summary>
         [BsonElement("Info")]
-        public List<NodeDescriptionInfo> Info { get; set; }
+        public NodeDescriptionInfo Info { get; set; }
     }
 }
