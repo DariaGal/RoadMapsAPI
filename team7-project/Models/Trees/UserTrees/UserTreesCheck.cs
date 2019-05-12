@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Models.Trees
 {
-    public class UserTrees
+    public class UserTreesCheck
     {
         [BsonId]
         public Guid UserId { get; set; }

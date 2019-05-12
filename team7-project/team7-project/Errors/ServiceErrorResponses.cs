@@ -91,5 +91,35 @@ namespace team7_project.Errors
             };
             return error;
         }
+
+        public static ServiceErrorResponse UserTreeNotFound(string treeId, string userId)
+        {
+            var error = new ServiceErrorResponse
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Error = new ServiceError
+                {
+                    Code = ServiceErrorCodes.BadRequest,
+                    Message = $"User({userId}) doesn't have tree with id: \"{treeId}\" in collection",
+                    Target = "tree"
+                }
+            };
+            return error;
+        }
+        
+        public static ServiceErrorResponse NodeNotFound(string nodeId, string treeId)
+        {
+            var error = new ServiceErrorResponse
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Error = new ServiceError
+                {
+                    Code = ServiceErrorCodes.BadRequest,
+                    Message = $"Tree({treeId}) doesn't have node with id: \"{nodeId}\"",
+                    Target = "tree"
+                }
+            };
+            return error;
+        }
     }
 }
