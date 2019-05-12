@@ -83,5 +83,19 @@ namespace team7_project.Controllers
             }
             return Ok(checkNodes);
         }
+
+        [HttpPut]
+        [Route("trees/{treeId}/edit")]
+        public async Task<IActionResult> EditTree([FromRoute] string treeId,/*TreeEditInfo,*/ CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        [Route("trees/create")]
+        public async Task<IActionResult> CreateTree([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
