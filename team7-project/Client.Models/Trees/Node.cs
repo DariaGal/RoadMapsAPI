@@ -15,9 +15,9 @@ namespace Client.Models.Trees
         public string Id { get; set; }
 
         /// <summary>
-        /// Описание узла
+        /// Название узла
         /// </summary>
-        public string Text { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Координата X узла

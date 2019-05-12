@@ -19,8 +19,7 @@ namespace Models.Converters.Trees
             var clientLink = new Client.Link
             {
                 SourceId = link.SourceId,
-                TargetId = link.TargetId,
-                Type = link.Type
+                TargetId = link.TargetId
             };
 
             return clientLink;
@@ -37,8 +36,7 @@ namespace Models.Converters.Trees
             var link = new Model.Link
             {
                 SourceId = clientLink.SourceId,
-                TargetId = clientLink.TargetId,
-                Type = clientLink.Type
+                TargetId = clientLink.TargetId
             };
 
             return link;

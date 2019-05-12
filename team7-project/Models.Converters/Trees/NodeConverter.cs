@@ -17,14 +17,14 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(node));
             }
 
-            var clientNodeDescriptionInfo = node.Info.Select(x => NodeDescriptionConverter.Convert(x)).ToList();
+            var clientNodeDescriptionInfo = node.Info.Select(x => NodeDescriptionInfoConverter.Convert(x)).ToList();
 
 
 
             var clientNode = new Client.Node
             {
                 Id = node.Id,
-                Text = node.Text,               
+                Title = node.Title,               
                 X = node.X,
                 Y = node.Y,
                 Color = node.Color,
@@ -41,12 +41,12 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(clientNode));
             }
 
-            var nodeDescriptionInfo = clientNode.Info.Select(x => NodeDescriptionConverter.Convert(x)).ToList();
+            var nodeDescriptionInfo = clientNode.Info.Select(x => NodeDescriptionInfoConverter.Convert(x)).ToList();
 
             var node = new Model.Node
             {
                 Id = clientNode.Id,
-                Text = clientNode.Text,
+                Title = clientNode.Title,
                 X = clientNode.X,
                 Y = clientNode.Y,
                 Color = clientNode.Color,

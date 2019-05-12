@@ -4,17 +4,16 @@ using System.Text;
 
 namespace Client.Models.Trees
 {
-    public class NodeDescriptionInfo
+    public class NodeLinkData
     {
         /// <summary>
-        /// Описание узла
+        /// Описание ссылки
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Список ссылок
+        /// Текст ссылки
         /// </summary>
-        public List<NodeLinkData> Data { get; set; }
-
+        public string Link { get; set; }
     }
 }

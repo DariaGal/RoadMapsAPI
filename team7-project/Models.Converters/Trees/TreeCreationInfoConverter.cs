@@ -17,12 +17,25 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(clientTree));
             }
 
-            var clientNodes = clientTree.Nodes.Select(x => NodeConverter.Convert(x)).ToList();
-            var clientLinks = clientTree.Links.Select(x => LinkConverter.Convert(x)).ToList();
+            List<Model.Node> clientNodes = null;
+            List<Model.Link> clientLinks = null;
+
+
+            if (clientTree.Nodes != null)
+            {
+                clientNodes = clientTree.Nodes.Select(x => NodeConverter.Convert(x)).ToList();
+            }
+
+            if (clientTree.Links != null)
+            {
+                clientLinks = clientTree.Links.Select(x => LinkConverter.Convert(x)).ToList();
+            }
 
             var tree = new Model.TreeCreationInfo
             {
                 Title = clientTree.Title,
+                Description = clientTree.Description,
+                Tags = clientTree.Tags,
                 Nodes = clientNodes,
                 Links = clientLinks
             };

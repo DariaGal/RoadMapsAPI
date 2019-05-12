@@ -17,10 +17,10 @@ namespace Models.Trees
         public string Id { get; set; }
 
         /// <summary>
-        /// Описание узла
+        /// Название узла
         /// </summary>
-        [BsonElement("Text")]
-        public string Text { get; set; }
+        [BsonElement("Title")]
+        public string Title { get; set; }
 
         /// <summary>
         /// Координата X узла

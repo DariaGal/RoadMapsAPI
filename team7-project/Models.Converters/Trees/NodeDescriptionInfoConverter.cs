@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Models.Converters.Trees
@@ -7,7 +8,7 @@ namespace Models.Converters.Trees
     using Client = Client.Models.Trees;
     using Model = Models.Trees;
 
-    public class NodeDescriptionConverter
+    public class NodeDescriptionInfoConverter
     {
         public static Client.NodeDescriptionInfo Convert(Model.NodeDescriptionInfo nodeDescriptionInfo)
         {
@@ -16,11 +17,12 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(nodeDescriptionInfo));
             }
 
+            var clientNodeData = nodeDescriptionInfo.Data.Select(x => NodeLinkDataConverter.Convert(x)).ToList();
 
             var clientNodeDescriptionInfo = new Client.NodeDescriptionInfo
             {
                 Description = nodeDescriptionInfo.Description,
-                Data = nodeDescriptionInfo.Data
+                Data = clientNodeData
             };
 
             return clientNodeDescriptionInfo;
@@ -33,10 +35,12 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(clientNodeDescriptionInfo));
             }
 
+            var nodeData = clientNodeDescriptionInfo.Data.Select(x => NodeLinkDataConverter.Convert(x)).ToList();
+
             var nodeDescriptionInfo = new Model.NodeDescriptionInfo
             {
                 Description = clientNodeDescriptionInfo.Description,
-                Data = clientNodeDescriptionInfo.Data
+                Data = nodeData
             };
 
             return nodeDescriptionInfo;

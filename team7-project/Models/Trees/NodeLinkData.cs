@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Models.Trees
 {
-    public class NodeDescriptionInfo
+    public class NodeLinkData
     {
         /// <summary>
         /// Описание ссылки
@@ -16,7 +16,7 @@ namespace Models.Trees
         /// <summary>
         /// Текст ссылки
         /// </summary>
-        [BsonElement("Data")]
-        public List<NodeLinkData> Data { get; set; }
+        [BsonElement("Link")]
+        public string Link { get; set; }
     }
 }

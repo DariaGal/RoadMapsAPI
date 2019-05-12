@@ -21,11 +21,5 @@ namespace Models.Trees
         /// </summary>
         [BsonElement("TargetId")]
         public string TargetId { get; set; }
-
-        /// <summary>
-        /// Тип связи
-        /// </summary>
-        [BsonElement("Type")]
-        public string Type { get; set; }
     }
 }
