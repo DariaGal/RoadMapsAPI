@@ -53,7 +53,9 @@ namespace team7_project.Controllers
 
             var clientTree = TreeConverter.Convert(tree);
 
-            return Ok(clientTree);
+            var clientTreeOutIndo = new Client.Models.Trees.TreeOutInfo(clientTree);
+
+            return Ok(clientTreeOutIndo);
         }
 
         /// <summary>
@@ -64,7 +66,7 @@ namespace team7_project.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 201)]
-        public async Task<IActionResult> GetTreeAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllTreesAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -85,15 +87,21 @@ namespace team7_project.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateTreeAsync([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
         {
+            //TODO: добавить всяккие проверочки на адекватность данных, но это потом
+
+
+
             var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
             var treeId = await trees.CreateAsync(tree, cancellationToken);
+
+            //var clientTree = TreeConverter.Convert(tree);
 
             var routeParams = new Dictionary<string, object>
             {
                 { "treeId", treeId }
             };
 
-            return CreatedAtRoute("GetTaskRoute", routeParams, treeId);
+            return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
         }
 
         [Authorize]

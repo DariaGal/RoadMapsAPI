@@ -23,6 +23,19 @@ namespace Models.Trees
         public string Title { get; set; }
 
         /// <summary>
+        /// Описание
+        /// </summary>
+        [BsonElement("Description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Список тегов
+        /// </summary>
+        [BsonElement("Tags")]
+        public List<string> Tags { get; set; }
+
+
+        /// <summary>
         /// Список узлов
         /// </summary>
         [BsonElement("Nodes")]

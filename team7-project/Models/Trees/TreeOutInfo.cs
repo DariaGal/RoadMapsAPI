@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Client.Models.Trees
+namespace Models.Trees
 {
-    /// <summary>
-    /// Дерево
-    /// </summary>
-    public class Tree
+    public class TreeOutInfo
     {
+        /// <summary>
+        /// Идентификатор дерева
+        /// </summary>
         public string Id { get; set; }
 
         /// <summary>
@@ -26,14 +26,16 @@ namespace Client.Models.Trees
         /// </summary>
         public List<string> Tags { get; set; }
 
-        /// <summary>
-        /// Список узлов
-        /// </summary>
-        public List<Node> Nodes { get; set; }
+        public TreeOutInfo(Tree tree)
+        {
+            Id = tree.Id;
+            Title = tree.Title;
+            Description = tree.Description;
+            Tags = tree.Tags;
+        }
 
-        /// <summary>
-        /// Список связей
-        /// </summary>
-        public List<Link> Links { get; set; }
+        public TreeOutInfo()
+        {
+        }
     }
 }

@@ -15,9 +15,9 @@ namespace Client.Models.Trees
         public string Id { get; set; }
 
         /// <summary>
-        /// Описание узла
+        /// Название узла
         /// </summary>
-        public string Text { get; set; }
+        public string Title { get; set; }
 
         /// <summary>
         /// Координата X узла
@@ -30,8 +30,13 @@ namespace Client.Models.Trees
         public double Y { get; set; }
 
         /// <summary>
-        /// Тип узла
+        /// Цвет узла
         /// </summary>
-        public string Type { get; set; }
+        public string Color { get; set; }
+
+        /// <summary>
+        ///Информация об узле и список ссылок
+        /// </summary>
+        public NodeDescriptionInfo Info { get; set; }
     }
 }

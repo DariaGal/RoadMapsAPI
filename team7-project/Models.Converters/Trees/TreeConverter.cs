@@ -23,6 +23,8 @@ namespace Models.Converters.Trees
             var clientTree = new Client.Tree
             {
                 Id = tree.Id,
+                Description = tree.Description,
+                Tags = tree.Tags,
                 Title = tree.Title,
                 Nodes = clientNodes,
                 Links = clientLinks

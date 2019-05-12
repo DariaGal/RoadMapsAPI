@@ -18,10 +18,5 @@ namespace Client.Models.Trees
         /// Идетификатор целевого узла
         /// </summary>
         public string TargetId { get; set; }
-
-        /// <summary>
-        /// Тип связи
-        /// </summary>
-        public string Type { get; set; }
     }
 }

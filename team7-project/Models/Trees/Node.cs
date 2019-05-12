@@ -17,10 +17,10 @@ namespace Models.Trees
         public string Id { get; set; }
 
         /// <summary>
-        /// Описание узла
+        /// Название узла
         /// </summary>
-        [BsonElement("Text")]
-        public string Text { get; set; }
+        [BsonElement("Title")]
+        public string Title { get; set; }
 
         /// <summary>
         /// Координата X узла
@@ -35,9 +35,15 @@ namespace Models.Trees
         public double Y { get; set; }
 
         /// <summary>
-        /// Тип узла
+        /// Цвет узла
         /// </summary>
-        [BsonElement("Type")]
-        public string Type { get; set; }
+        [BsonElement("Color")]
+        public string Color { get; set; }
+
+        /// <summary>
+        ///Информация об узле и список ссылок
+        /// </summary>
+        [BsonElement("Info")]
+        public NodeDescriptionInfo Info { get; set; }
     }
 }

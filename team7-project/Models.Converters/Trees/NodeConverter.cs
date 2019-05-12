@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Models.Converters.Trees
@@ -16,13 +17,16 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(node));
             }
 
+
+
             var clientNode = new Client.Node
             {
                 Id = node.Id,
-                Text = node.Text,
-                Type = node.Type,
+                Title = node.Title,
                 X = node.X,
-                Y = node.Y
+                Y = node.Y,
+                Color = node.Color,
+                Info = NodeDescriptionInfoConverter.Convert(node.Info)
             };
 
             return clientNode;
@@ -35,13 +39,15 @@ namespace Models.Converters.Trees
                 throw new ArgumentNullException(nameof(clientNode));
             }
 
+
             var node = new Model.Node
             {
                 Id = clientNode.Id,
-                Text = clientNode.Text,
-                Type = clientNode.Type,
+                Title = clientNode.Title,
                 X = clientNode.X,
-                Y = clientNode.Y
+                Y = clientNode.Y,
+                Color = clientNode.Color,
+                Info = NodeDescriptionInfoConverter.Convert(clientNode.Info)
             };
 
             return node;

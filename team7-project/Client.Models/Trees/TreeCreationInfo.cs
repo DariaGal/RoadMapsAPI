@@ -14,6 +14,18 @@ namespace Client.Models.Trees
         public string Title { get; set; }
 
         /// <summary>
+        /// Описание
+        /// </summary>
+        [DataMember(IsRequired = true)]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Список тегов
+        /// </summary>
+        [DataMember(IsRequired = true)]
+        public List<string> Tags { get; set; }
+
+        /// <summary>
         /// Список узлов
         /// </summary>
         [DataMember(IsRequired = true)]
