@@ -27,7 +27,7 @@ namespace Models.Trees.Services
             userTreesCheck = database.GetCollection<UserTreesCheck>("UserTrees");
         }
 
-        public async Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, CancellationToken cancellationToken)
+        public async Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, string authorId, CancellationToken cancellationToken)
         {
             if (creationInfo == null)
             {
@@ -39,6 +39,7 @@ namespace Models.Trees.Services
             var tree = new Tree
             {
                 Id = Guid.NewGuid().ToString(),
+                AuthorId = authorId,
                 Title = creationInfo.Title,
                 Description = creationInfo.Description,
                 Tags = creationInfo.Tags,

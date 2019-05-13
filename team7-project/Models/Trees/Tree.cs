@@ -16,6 +16,9 @@ namespace Models.Trees
         [BsonId]
         public string Id { get; set; }
 
+        [BsonElement("AuthorId")]
+        public string AuthorId { get; set; }
+
         /// <summary>
         /// Заголовок дерева
         /// </summary>

@@ -10,7 +10,7 @@ namespace Models.Converters.Trees
 
     public static class TreeConverter
     {
-        public static Client.Tree Convert(Model.Tree tree)
+        public static Client.Tree Convert(Model.Tree tree, string authorLogin)
         {
             if(tree == null)
             {
@@ -23,6 +23,7 @@ namespace Models.Converters.Trees
             var clientTree = new Client.Tree
             {
                 Id = tree.Id,
+                Author = authorLogin,
                 Description = tree.Description,
                 Tags = tree.Tags,
                 Title = tree.Title,

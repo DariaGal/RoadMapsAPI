@@ -10,6 +10,7 @@ using team7_project.Errors;
 using Models.Converters.Trees;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Models.Users.Services;
 
 namespace team7_project.Controllers
 {
@@ -18,10 +19,12 @@ namespace team7_project.Controllers
     public class TreesController : Controller
     {
         private readonly ITreeService trees;
+        private readonly IUserService users;
 
-        public TreesController(ITreeService trees)
+        public TreesController(ITreeService trees, IUserService users)
         {
             this.trees = trees;
+            this.users = users;
         }
 
         /// <summary>
@@ -51,9 +54,11 @@ namespace team7_project.Controllers
                 return BadRequest(error);
             }
 
-            var clientTree = TreeConverter.Convert(tree);
+            var user = await users.GetAsync(Guid.Parse(tree.AuthorId), cancellationToken);
 
-            var clientTreeOutIndo = new Client.Models.Trees.TreeOutInfo(clientTree);
+            var clientTree = TreeConverter.Convert(tree,user.Login);
+
+            var clientTreeOutIndo = new Client.Models.Trees.TreeInfo(clientTree);
 
             return Ok(clientTreeOutIndo);
         }
@@ -89,10 +94,10 @@ namespace team7_project.Controllers
         {
             //TODO: добавить всяккие проверочки на адекватность данных, но это потом
 
-
+            var authorId = User.Claims.First(c => c.Type == "Id").Value;
 
             var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
-            var treeId = await trees.CreateAsync(tree, cancellationToken);
+            var treeId = await trees.CreateAsync(tree, authorId, cancellationToken);
 
             //var clientTree = TreeConverter.Convert(tree);
 

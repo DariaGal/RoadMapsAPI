@@ -8,7 +8,7 @@ namespace Models.Trees.UserTrees
     {
         public string Id { get; set; }
 
-        public Guid Author { get; set; }
+        public string Author { get; set; }
 
         public string Title { get; set; }
 

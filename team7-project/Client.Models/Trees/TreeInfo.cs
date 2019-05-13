@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Models.Trees
+namespace Client.Models.Trees
 {
-    public class TreeOutInfo
+    public class TreeInfo
     {
         /// <summary>
         /// Идентификатор дерева
         /// </summary>
         public string Id { get; set; }
+        
+        /// <summary>
+        /// Автор дерева
+        /// </summary>
+        public string Author { get; set; }
 
         /// <summary>
         /// Заголовок дерева
@@ -26,7 +31,7 @@ namespace Models.Trees
         /// </summary>
         public List<string> Tags { get; set; }
 
-        public TreeOutInfo(Tree tree)
+        public TreeInfo(Tree tree)
         {
             Id = tree.Id;
             Title = tree.Title;
@@ -34,7 +39,7 @@ namespace Models.Trees
             Tags = tree.Tags;
         }
 
-        public TreeOutInfo()
+        public TreeInfo()
         {
         }
     }

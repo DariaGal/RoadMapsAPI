@@ -24,7 +24,7 @@ namespace team7_project.Controllers
         }
 
         [HttpGet]
-        [Route("trees")]
+        [Route("")]
         public async Task<IActionResult> GetTreesAsync(CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
@@ -34,7 +34,7 @@ namespace team7_project.Controllers
 
             var userTrees = UserTreesOutConverter.Convert(userLogin, userTreesModel);
 
-            userTrees.TreesInfo.Where(x => x.Author == userId).ToList().ForEach(y => y.EnableEdit = true);
+            userTrees.TreesInfo.Where(x => x.Author == userId.ToString()).ToList().ForEach(y => y.EnableEdit = true);
             return Ok(userTrees);
         }
 

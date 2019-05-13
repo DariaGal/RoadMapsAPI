@@ -12,6 +12,11 @@ namespace Client.Models.Trees
         public string Id { get; set; }
 
         /// <summary>
+        /// Автор дерева
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
         /// Заголовок дерева
         /// </summary>
         public string Title { get; set; }

@@ -11,7 +11,7 @@ namespace Models.Trees.Services
     {
         Task<Tree> GetAsync(string id, CancellationToken cancellationToken);
         Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken);
-        Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, CancellationToken cancellationToken);
+        Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, string authorId, CancellationToken cancellationToken);
         Task AppendTreeToUserAsync(Guid userId, string treeId, CancellationToken cancellationToken);
 
         Task<List<UserTreeInfo>> GetUserTreesAsync(Guid userId, CancellationToken cancellationToken);

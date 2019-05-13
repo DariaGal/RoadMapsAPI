@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,13 +9,38 @@ namespace Models.Trees
         /// <summary>
         /// Идентификатор дерева
         /// </summary>
-        [BsonId]
         public string Id { get; set; }
+
+        /// <summary>
+        /// Автор дерева
+        /// </summary>
+        public string Author { get; set; }
 
         /// <summary>
         /// Заголовок дерева
         /// </summary>
-        [BsonElement("Title")]
         public string Title { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Список тегов
+        /// </summary>
+        public List<string> Tags { get; set; }
+
+        public TreeInfo(Tree tree)
+        {
+            Id = tree.Id;
+            Title = tree.Title;
+            Description = tree.Description;
+            Tags = tree.Tags;
+        }
+
+        public TreeInfo()
+        {
+        }
     }
 }

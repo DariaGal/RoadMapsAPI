@@ -10,16 +10,17 @@ namespace Models.Converters.Trees
     public class TreeOutInfoConverter
     {
 
-        public static Client.TreeOutInfo Convert(Model.TreeOutInfo treeOutInfo)
+        public static Client.TreeInfo Convert(Model.TreeInfo treeOutInfo)
         {
             if (treeOutInfo == null)
             {
                 throw new ArgumentNullException(nameof(treeOutInfo));
             }
 
-            var clientTreeOutInfo = new Client.TreeOutInfo
+            var clientTreeOutInfo = new Client.TreeInfo
             {
                 Id = treeOutInfo.Id,
+                Author = treeOutInfo.Author,
                 Description = treeOutInfo.Description,
                 Tags = treeOutInfo.Tags,
                 Title = treeOutInfo.Title
@@ -28,16 +29,17 @@ namespace Models.Converters.Trees
             return clientTreeOutInfo;
         }
 
-        public static Model.TreeOutInfo Convert(Client.TreeOutInfo clientTreeOutInfo)
+        public static Model.TreeInfo Convert(Client.TreeInfo clientTreeOutInfo)
         {
             if (clientTreeOutInfo == null)
             {
                 throw new ArgumentNullException(nameof(clientTreeOutInfo));
             }
 
-            var treeOutInfo = new Model.TreeOutInfo
+            var treeOutInfo = new Model.TreeInfo
             {
                 Id = clientTreeOutInfo.Id,
+                Author = clientTreeOutInfo.Author,
                 Description = clientTreeOutInfo.Description,
                 Tags = clientTreeOutInfo.Tags,
                 Title = clientTreeOutInfo.Title
