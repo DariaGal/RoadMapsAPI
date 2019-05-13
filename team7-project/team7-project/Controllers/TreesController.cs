@@ -54,7 +54,7 @@ namespace team7_project.Controllers
                 return BadRequest(error);
             }
 
-            var user = await users.GetAsync(Guid.Parse(tree.AuthorId), cancellationToken);
+            var user = await users.GetAsync(tree.AuthorId, cancellationToken);
 
             var clientTree = TreeConverter.Convert(tree,user.Login);
 
@@ -94,7 +94,7 @@ namespace team7_project.Controllers
         {
             //TODO: добавить всяккие проверочки на адекватность данных, но это потом
 
-            var authorId = User.Claims.First(c => c.Type == "Id").Value;
+            var authorId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
 
             var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
             var treeId = await trees.CreateAsync(tree, authorId, cancellationToken);

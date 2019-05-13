@@ -10,6 +10,7 @@ using System.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
 using Models.Trees.UserTrees;
+using Models.Users;
 
 namespace Models.Trees.Services
 {
@@ -17,6 +18,7 @@ namespace Models.Trees.Services
     {
         private readonly IMongoCollection<Tree> trees;
         private readonly IMongoCollection<UserTreesCheck> userTreesCheck;
+        private readonly IMongoCollection<User> users;
 
         public TreeService(IConfiguration config)
         {
@@ -25,9 +27,10 @@ namespace Models.Trees.Services
             var database = client.GetDatabase("team7db");
             trees = database.GetCollection<Tree>("Trees");
             userTreesCheck = database.GetCollection<UserTreesCheck>("UserTrees");
+            users = database.GetCollection<User>("Users");
         }
 
-        public async Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, string authorId, CancellationToken cancellationToken)
+        public async Task<string> CreateAsync(Models.Trees.TreeCreationInfo creationInfo, Guid authorId, CancellationToken cancellationToken)
         {
             if (creationInfo == null)
             {
@@ -75,16 +78,33 @@ namespace Models.Trees.Services
         }
 
 
-        public Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<TreeInfo>> GetAllAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            var findResultTrees = await trees.FindAsync(Builders<Tree>.Filter.Empty);
+            var allTrees = await findResultTrees.ToListAsync();
 
-            var projection = Builders<Tree>.Projection.Include("Title");
-            var result = trees.Find(Builders<Tree>.Filter.Empty).Project(projection).ToList().ToJson();
+            var findResultUsers = await users.FindAsync(Builders<User>.Filter.Empty);
+            var allUsers = await findResultUsers.ToListAsync();
 
-            var treeInfoList = BsonSerializer.Deserialize<List<TreeInfo>>(result);
+            var treeInfoList = new List<TreeInfo>();
 
-            return Task.FromResult<IReadOnlyList<TreeInfo>>(treeInfoList);
+            foreach(var tree in allTrees)
+            {
+                var author = allUsers.Find(x => x.Id == tree.AuthorId);
+                var treeinfo = new TreeInfo
+                {
+                    Id = tree.Id,
+                    Author = author.Login,
+                    Description = tree.Description,
+                    Tags = tree.Tags,
+                    Title = tree.Title
+                };
+
+                treeInfoList.Add(treeinfo);
+            }
+
+            return treeInfoList;
         }
 
 
@@ -108,7 +128,7 @@ namespace Models.Trees.Services
             var treeFindResult = await trees.FindAsync(t => t.Id == treeId);
             var tree = await treeFindResult.FirstOrDefaultAsync();
 
-            if(tree == null)
+            if (tree == null)
             {
                 throw new TreeNotFoundException(treeId);
             }
@@ -126,7 +146,7 @@ namespace Models.Trees.Services
         {
             /*доделать с новым деревом*/
 
-            if(userId == null)
+            if (userId == null)
             {
                 throw new ArgumentNullException(nameof(userId));
             }
@@ -137,7 +157,7 @@ namespace Models.Trees.Services
 
             var findResult = await userTreesCheck.FindAsync(u => u.UserId == userId);
             var userTreesInfo = await findResult.FirstOrDefaultAsync();
-            
+
             if (userTreesInfo == null)
             {
                 var uTree = new UserTreesCheck
@@ -152,18 +172,18 @@ namespace Models.Trees.Services
             }
 
             var treesId = new List<string>();
-            foreach(var treeInfo in userTreesInfo.TreeCkeck)
+            foreach (var treeInfo in userTreesInfo.TreeCkeck)
             {
                 treesId.Add(treeInfo.Id);
             }
-            
+
             var filter = new FilterDefinitionBuilder<Tree>().In(x => x.Id, treesId);
             var find = await trees.FindAsync(filter);
             var listOfTree = await find.ToListAsync();
-            
-            foreach(var tree in listOfTree)
+
+            foreach (var tree in listOfTree)
             {
-                userTreeInfo.Add(new UserTreeInfo { Id = tree.Id, Title = tree.Title});
+                userTreeInfo.Add(new UserTreeInfo { Id = tree.Id, Title = tree.Title });
             }
 
             return userTreeInfo;
@@ -171,7 +191,7 @@ namespace Models.Trees.Services
 
         public async Task CheckNode(Guid userId, string treeId, string nodeId, CancellationToken cancellationToken)
         {
-            if(userId == null)
+            if (userId == null)
             {
                 throw new ArgumentNullException(nameof(userId));
             }
@@ -187,7 +207,7 @@ namespace Models.Trees.Services
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             var filterUser = Builders<UserTreesCheck>.Filter.Eq(u => u.UserId, userId);
             var filterTree = Builders<UserTreesCheck>.Filter.ElemMatch(x => x.TreeCkeck, y => y.Id == treeId);
             var filter = filterUser & filterTree;
@@ -196,20 +216,20 @@ namespace Models.Trees.Services
             var userTrees = await userTreesFindResult.FirstOrDefaultAsync();
 
             var treeCheck = userTrees.TreeCkeck.FirstOrDefault(t => t.Id == treeId);
-            if(treeCheck == null)
+            if (treeCheck == null)
             {
                 throw new UserTreeNotFoundException(treeId, userId.ToString());
             }
 
             var treeFindResult = await trees.FindAsync(t => t.Id == treeId);
             var tree = await treeFindResult.FirstOrDefaultAsync();
-            if(tree == null)
+            if (tree == null)
             {
                 throw new TreeNotFoundException(treeId);
             }
 
             var node = tree.Nodes.FirstOrDefault(x => x.Id == nodeId);
-            if(node == null)
+            if (node == null)
             {
                 throw new NodeNotFoundException(nodeId, treeId);
             }
@@ -239,11 +259,11 @@ namespace Models.Trees.Services
                 .Where(x => x.Id == treeId)
                 .FirstOrDefaultAsync();
 
-            if(treeInfo == null)
+            if (treeInfo == null)
             {
                 throw new UserTreeNotFoundException(treeId, userId.ToString());
             }
-            
+
             return treeInfo.CheckedNodes;
         }
     }
