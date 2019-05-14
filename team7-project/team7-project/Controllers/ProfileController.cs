@@ -31,10 +31,8 @@ namespace team7_project.Controllers
             var userLogin = User.Claims.First(c => c.Type == "Name").Value;
 
             var userTreesModel = await trees.GetUserTreesAsync(userId, cancellationToken);
-
             var userTrees = UserTreesOutConverter.Convert(userLogin, userTreesModel);
 
-            userTrees.TreesInfo.Where(x => x.Author == userId.ToString()).ToList().ForEach(y => y.EnableEdit = true);
             return Ok(userTrees);
         }
 

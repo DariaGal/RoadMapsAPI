@@ -23,7 +23,7 @@ namespace Models.Converters.Trees
                 Author = modelTreeInfo.Author,
                 Description = modelTreeInfo.Description,
                 Tags = modelTreeInfo.Tags,
-                EnableEdit = false
+                EnableEdit = modelTreeInfo.EnableEdit
             };
 
             return clientTreeInfo;

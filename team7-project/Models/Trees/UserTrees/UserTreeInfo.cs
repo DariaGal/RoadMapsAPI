@@ -15,5 +15,7 @@ namespace Models.Trees.UserTrees
         public List<string> Tags { get; set; }
 
         public string Description { get; set; }
+
+        public bool EnableEdit { get; set; }
     }
 }

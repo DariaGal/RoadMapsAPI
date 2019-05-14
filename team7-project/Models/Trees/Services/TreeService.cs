@@ -89,7 +89,7 @@ namespace Models.Trees.Services
 
             var treeInfoList = new List<TreeInfo>();
 
-            foreach(var tree in allTrees)
+            foreach (var tree in allTrees)
             {
                 var author = allUsers.Find(x => x.Id == tree.AuthorId);
                 var treeinfo = new TreeInfo
@@ -106,7 +106,6 @@ namespace Models.Trees.Services
 
             return treeInfoList;
         }
-
 
         public async Task AppendTreeToUserAsync(Guid userId, string treeId, CancellationToken cancellationToken)
         {
@@ -144,8 +143,6 @@ namespace Models.Trees.Services
 
         public async Task<List<UserTreeInfo>> GetUserTreesAsync(Guid userId, CancellationToken cancellationToken)
         {
-            /*доделать с новым деревом*/
-
             if (userId == null)
             {
                 throw new ArgumentNullException(nameof(userId));
@@ -180,10 +177,24 @@ namespace Models.Trees.Services
             var filter = new FilterDefinitionBuilder<Tree>().In(x => x.Id, treesId);
             var find = await trees.FindAsync(filter);
             var listOfTree = await find.ToListAsync();
+            
+            var findResultUsers = await users.FindAsync(Builders<User>.Filter.Empty);
+            var allUsers = await findResultUsers.ToListAsync();
 
             foreach (var tree in listOfTree)
             {
-                userTreeInfo.Add(new UserTreeInfo { Id = tree.Id, Title = tree.Title });
+                var author = allUsers.Find(x => x.Id == tree.AuthorId);
+                var enableEdit = userId == author.Id;
+                userTreeInfo.Add(
+                    new UserTreeInfo
+                    {
+                        Id = tree.Id,
+                        Author = author.Login,
+                        Title = tree.Title,
+                        Description = tree.Description,
+                        Tags = tree.Tags,
+                        EnableEdit = enableEdit
+                    });
             }
 
             return userTreeInfo;
