@@ -117,7 +117,7 @@ namespace team7_project.Controllers
         /// <param name="treeEditInfo"> </param>
         /// <response code="200"></response>
         /// <response code="403">Если пользователь не является автором дерева</response> 
-        [HttpPut
+        [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 403)]
         [Route("trees/{treeId}/edit")]
