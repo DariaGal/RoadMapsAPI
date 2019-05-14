@@ -70,7 +70,7 @@ namespace team7_project.Controllers
         /// <response code="200">Возвращает список информации о деревьях</response>
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 201)]
+        [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 200)]
         public async Task<IActionResult> GetAllTreesAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -80,6 +80,12 @@ namespace team7_project.Controllers
             return Ok(info);
         }
 
+        /// <summary>
+        /// Добавление дерева в профиль пользователя
+        /// </summary> 
+        /// <param name="treeId"> </param> 
+        /// <response code="200"></response>
+        /// <response code="400">Если дерево по указанному индексу отсутствует</response>  
         [Authorize]
         [HttpPatch]
         [Route("{treeID}/add")]

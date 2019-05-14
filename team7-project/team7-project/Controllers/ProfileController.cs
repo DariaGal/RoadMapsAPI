@@ -10,6 +10,7 @@ using Models.Converters.Trees;
 using Models.Trees;
 using team7_project.Errors;
 using Microsoft.AspNetCore.Http;
+using Client.Models.Trees.UserTrees;
 
 namespace team7_project.Controllers
 {
@@ -24,7 +25,13 @@ namespace team7_project.Controllers
             this.trees = trees;
         }
 
+        /// <summary>
+        /// Возвращает список деревьев пользователя
+        /// </summary>  
+        /// <returns>Список информации о деревьях</returns>
+        /// <response code="200">Список информации о деревьях</response>
         [HttpGet]
+        [ProducesResponseType(typeof(UserTreesOut), 200)]
         [Route("")]
         public async Task<IActionResult> GetTreesAsync(CancellationToken cancellationToken)
         {
@@ -37,7 +44,18 @@ namespace team7_project.Controllers
             return Ok(userTrees);
         }
 
+        /// <summary>
+        /// Добавляет вершину дерева в список помеченных вершин
+        /// </summary> 
+        /// <param name="treeId"> </param> 
+        /// <param name="checknode"> </param> 
+        /// <response code="200"></response>
+        /// <response code="400">Если пользователь не добавлял дерево себе в профиль
+        /// Если дерева не существует
+        /// Если вершины не существует</response> 
         [HttpPatch]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
         [Route("trees/{treeId}")]
         public async Task<IActionResult> PutCheckNode([FromRoute] string treeId, [FromQuery] string checknode, CancellationToken cancellationToken)
         {
@@ -65,7 +83,16 @@ namespace team7_project.Controllers
             return Ok();
         }
 
+
+        /// <summary>
+        /// Возвращает список помеченных вершин дерева
+        /// </summary> 
+        /// <param name="treeId"> </param>
+        /// <response code="200"></response>
+        /// <response code="400">Если пользователь не добавлял дерево себе в профиль</response> 
         [HttpGet]
+        [ProducesResponseType(typeof(List<string>),200)]
+        [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
         [Route("trees/{treeId}/checknodes")]
         public async Task<IActionResult> GetCheckNodes([FromRoute] string treeId, CancellationToken cancellationToken)
         {
@@ -83,7 +110,16 @@ namespace team7_project.Controllers
             return Ok(checkNodes);
         }
 
-        [HttpPut]
+        /// <summary>
+        /// Редактирование дерева
+        /// </summary> 
+        /// <param name="treeId"> </param>
+        /// <param name="treeEditInfo"> </param>
+        /// <response code="200"></response>
+        /// <response code="403">Если пользователь не является автором дерева</response> 
+        [HttpPut
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 403)]
         [Route("trees/{treeId}/edit")]
         public async Task<IActionResult> EditTree([FromRoute] string treeId, [FromBody] Client.Models.Trees.TreeCreationInfo treeEditInfo, CancellationToken cancellationToken)
         {
