@@ -11,6 +11,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson;
 using Models.Trees.UserTrees;
 using Models.Users;
+using System.Security;
 
 namespace Models.Trees.Services
 {
@@ -276,6 +277,29 @@ namespace Models.Trees.Services
             }
 
             return treeInfo.CheckedNodes;
+        }
+
+        public async Task UpdateTreeAsync(string treeId, Guid userId, TreeCreationInfo treeEditInfo, CancellationToken cancellationToken)
+        {
+            var findTreeResult = await trees.FindAsync(x => x.Id == treeId);
+            var tree = await findTreeResult.FirstOrDefaultAsync();
+
+            if(userId != tree.AuthorId)
+            {
+                throw new UserDoesNotHavePermissionToEditTree(treeId, userId.ToString());
+            }
+
+            var newTree = new Tree {
+                Id = treeId,
+                AuthorId = tree.AuthorId,
+                Description = treeEditInfo.Description,
+                Title = treeEditInfo.Title,
+                Tags = treeEditInfo.Tags,
+                Nodes = treeEditInfo.Nodes,
+                Links = treeEditInfo.Links
+            };
+
+            await trees.FindOneAndReplaceAsync(x => x.Id == treeId, newTree, cancellationToken: cancellationToken);
         }
     }
 }

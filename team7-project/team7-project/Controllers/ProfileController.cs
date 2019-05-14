@@ -9,6 +9,7 @@ using Models.Trees.Services;
 using Models.Converters.Trees;
 using Models.Trees;
 using team7_project.Errors;
+using Microsoft.AspNetCore.Http;
 
 namespace team7_project.Controllers
 {
@@ -84,9 +85,22 @@ namespace team7_project.Controllers
 
         [HttpPut]
         [Route("trees/{treeId}/edit")]
-        public async Task<IActionResult> EditTree([FromRoute] string treeId,/*TreeEditInfo,*/ CancellationToken cancellationToken)
+        public async Task<IActionResult> EditTree([FromRoute] string treeId, [FromBody] Client.Models.Trees.TreeCreationInfo treeEditInfo, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
+            
+            var tree = TreeCreationInfoConverter.Convert(treeEditInfo);
+
+            try
+            {
+                await trees.UpdateTreeAsync(treeId, userId, tree, cancellationToken);
+            }catch(UserDoesNotHavePermissionToEditTree)
+            {
+                var error = ServiceErrorResponses.UserCannotEditTree(treeId, userId.ToString());
+                return StatusCode(StatusCodes.Status403Forbidden, error);
+            }
+
+            return Ok();
         }
 
         [HttpPost]

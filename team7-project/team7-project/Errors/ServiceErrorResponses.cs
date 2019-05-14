@@ -121,5 +121,20 @@ namespace team7_project.Errors
             };
             return error;
         }
+
+        public static ServiceErrorResponse UserCannotEditTree(string treeId, string userId)
+        {
+            var error = new ServiceErrorResponse
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+                Error = new ServiceError
+                {
+                    Code = ServiceErrorCodes.Forbidden,
+                    Message = $"User({userId}) can't edit tree with id \"{treeId}\" because not author",
+                    Target = "tree"
+                }
+            };
+            return error;
+        }
     }
 }

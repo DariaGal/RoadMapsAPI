@@ -17,5 +17,6 @@ namespace Models.Trees.Services
         Task<List<UserTreeInfo>> GetUserTreesAsync(Guid userId, CancellationToken cancellationToken);
         Task CheckNode(Guid userId, string treeId, string nodeId, CancellationToken cancellationToken);
         Task<IReadOnlyList<string>> GetCheckNodes(Guid userId, string treeId, CancellationToken cancellationToken);
+        Task UpdateTreeAsync(string treeId, Guid userId, Models.Trees.TreeCreationInfo treeEditInfo, CancellationToken cancellationToken);
     }
 }
