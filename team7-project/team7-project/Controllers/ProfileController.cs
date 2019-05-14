@@ -102,12 +102,31 @@ namespace team7_project.Controllers
 
             return Ok();
         }
-
+        
+        /// <summary>
+        /// Создание дерева
+        /// </summary>  
+        /// <param name="treeCreationInfo"> </param> 
+        /// <returns>Id дерева</returns>
+        /// <response code="201">Возвращает Id созданного дерева</response>
         [HttpPost]
-        [Route("trees/create")]
-        public async Task<IActionResult> CreateTree([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(string), 201)]
+        [Route("create")]
+        public async Task<IActionResult> CreateTreeAsync([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            //TODO: добавить всяккие проверочки на адекватность данных, но это потом
+
+            var authorId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
+
+            var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
+            var treeId = await trees.CreateAsync(tree, authorId, cancellationToken);
+            
+            var routeParams = new Dictionary<string, object>
+            {
+                { "treeId", treeId }
+            };
+
+            return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
         }
     }
 }

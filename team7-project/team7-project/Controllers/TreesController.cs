@@ -80,35 +80,6 @@ namespace team7_project.Controllers
             return Ok(info);
         }
 
-        /// <summary>
-        /// Создание дерева
-        /// </summary>  
-        /// <param name="treeCreationInfo"> </param> 
-        /// <returns>Id дерева</returns>
-        /// <response code="201">Возвращает Id созданного дерева</response>
-        [Authorize]
-        [HttpPost]
-        [ProducesResponseType(typeof(string), 201)]
-        [Route("create")]
-        public async Task<IActionResult> CreateTreeAsync([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
-        {
-            //TODO: добавить всяккие проверочки на адекватность данных, но это потом
-
-            var authorId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
-
-            var tree = TreeCreationInfoConverter.Convert(treeCreationInfo);
-            var treeId = await trees.CreateAsync(tree, authorId, cancellationToken);
-
-            //var clientTree = TreeConverter.Convert(tree);
-
-            var routeParams = new Dictionary<string, object>
-            {
-                { "treeId", treeId }
-            };
-
-            return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
-        }
-
         [Authorize]
         [HttpPatch]
         [Route("{treeID}/add")]
