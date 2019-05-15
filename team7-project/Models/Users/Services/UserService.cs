@@ -85,5 +85,18 @@ namespace Models.Users.Services
 
             return user;
         }
+
+        public async Task<UserInfo> GetUserInfoAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var findResult = await users.FindAsync(x => x.Id == userId);
+            var user = await findResult.FirstOrDefaultAsync();
+
+            var userInfo = new UserInfo
+            {
+                Login = user.Login
+            };
+
+            return userInfo;
+        }
     }
 }

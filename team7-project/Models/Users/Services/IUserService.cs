@@ -14,5 +14,7 @@ namespace Models.Users.Services
         Task<User> GetAsync(Guid userId, CancellationToken cancellationToken);
 
         Task<User> GetAsync(string login, CancellationToken cancellationToken);
+
+        Task<UserInfo> GetUserInfoAsync(Guid userId, CancellationToken cancellationToken);
     }
 }

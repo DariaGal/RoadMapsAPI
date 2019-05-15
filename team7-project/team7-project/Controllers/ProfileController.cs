@@ -11,6 +11,8 @@ using Models.Trees;
 using team7_project.Errors;
 using Microsoft.AspNetCore.Http;
 using Client.Models.Trees.UserTrees;
+using Models.Users.Services;
+using Client.Models.Users;
 
 namespace team7_project.Controllers
 {
@@ -20,9 +22,30 @@ namespace team7_project.Controllers
     public class ProfileController : Controller
     {
         private readonly ITreeService trees;
-        public ProfileController(ITreeService trees)
+        private readonly IUserService users;
+
+        public ProfileController(ITreeService trees, IUserService users)
         {
             this.trees = trees;
+            this.users = users;
+        }
+
+        /// <summary>
+        /// Информация о пользователе
+        /// </summary>  
+        /// <returns>Информация о пользователе/returns>
+        /// <response code="200">Информация о пользователе</response>
+        [HttpGet]
+        [ProducesResponseType(typeof(UserInfo), 200)]
+        [Route("userinfo")]
+        public async Task<IActionResult> GetuserInfoAsync(CancellationToken cancellationToken)
+        {
+            var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
+
+            var userInfo = await users.GetUserInfoAsync(userId, cancellationToken);
+            var clientUserInfo = Models.Converters.Users.UserInfoConverter.Convert(userInfo);
+
+            return Ok(clientUserInfo);
         }
 
         /// <summary>
@@ -32,7 +55,7 @@ namespace team7_project.Controllers
         /// <response code="200">Список информации о деревьях</response>
         [HttpGet]
         [ProducesResponseType(typeof(UserTreesOut), 200)]
-        [Route("")]
+        [Route("trees")]
         public async Task<IActionResult> GetTreesAsync(CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
