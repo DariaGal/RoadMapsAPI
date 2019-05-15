@@ -65,7 +65,7 @@ namespace team7_project.Auth
                 new Claim("Id", id)
                 };
 
-                var identity = new ClaimsIdentity(claims, "basic");
+                var identity = new ClaimsIdentity(claims, "jwt");
                 context.User = new ClaimsPrincipal(identity);
 
                 //Pass to the next middlware
