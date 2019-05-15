@@ -12,6 +12,8 @@ using MongoDB.Bson;
 using Models.Trees.UserTrees;
 using Models.Users;
 using System.Security;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace Models.Trees.Services
 {
@@ -300,6 +302,63 @@ namespace Models.Trees.Services
             };
 
             await trees.FindOneAndReplaceAsync(x => x.Id == treeId, newTree, cancellationToken: cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<TreeInfo>> SearchTreesAsync(TreeInfoSearchQuery query, CancellationToken cancellationToken)
+        {
+            if (query == null)
+            {
+                throw new ArgumentNullException(nameof(query));
+            }
+            
+            cancellationToken.ThrowIfCancellationRequested();
+
+            FilterDefinition<Tree> filter = FilterDefinition<Tree>.Empty;
+
+            if(query.Tags != null)
+            {
+                filter = filter & Builders<Tree>.Filter.AnyIn(x => x.Tags, query.Tags);
+            }
+
+            if(query.Title != null)
+            {
+                var pattern = @"\w*"+query.Title+@"\w*";
+                var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+                filter = filter & Builders<Tree>.Filter.Regex(x => x.Title, new BsonRegularExpression(regex));
+            }
+
+            var findResultTrees = await trees.FindAsync(filter);
+            var treesList = await findResultTrees.ToListAsync();
+
+            if(query.Offset != null)
+            {
+                treesList.Skip(query.Offset.Value);
+            }
+
+            if(query.Limit != null)
+            {
+                treesList.Take(query.Limit.Value);
+            }
+            
+            var findResultUsers = await users.FindAsync(Builders<User>.Filter.Empty);
+            var usersList = await findResultUsers.ToListAsync();
+
+            var treesInfoList = new List<TreeInfo>();
+
+            foreach(var tree in treesList)
+            {
+                var author = usersList.Find(x => x.Id == tree.AuthorId);
+                treesInfoList.Add(
+                    new TreeInfo
+                    {
+                        Id = tree.Id,
+                        Author = author.Login,
+                        Title = tree.Title,
+                        Description = tree.Description,
+                        Tags = tree.Tags
+                    });
+            }
+            return treesInfoList;
         }
     }
 }

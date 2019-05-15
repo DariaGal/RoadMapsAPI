@@ -71,11 +71,33 @@ namespace team7_project.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 200)]
+        [Route("all")]
         public async Task<IActionResult> GetAllTreesAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             var info = await trees.GetAllAsync(cancellationToken);
+
+            return Ok(info);
+        }
+
+
+        /// <summary>
+        /// Список деревьев соответствующих параметрам поиска
+        /// </summary>    
+        /// <param name="query"> </param> 
+        /// <returns>Список информации о деревьях</returns>
+        /// <response code="200">Возвращает список информации о деревьях</response>
+        [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(typeof(IReadOnlyList<TreeInfo>), 200)]
+        public async Task<IActionResult> SearchTreesAsync([FromQuery]Client.Models.Trees.TreeInfoSearchQuery query,CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var modelQuery = TreeInfoSearchQueryConverter.Convert(query);
+
+            var info = await trees.SearchTreesAsync(modelQuery, cancellationToken);
 
             return Ok(info);
         }
