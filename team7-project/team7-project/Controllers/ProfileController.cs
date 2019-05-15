@@ -56,7 +56,7 @@ namespace team7_project.Controllers
         [HttpPatch]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
-        [Route("trees/{treeId}")]
+        [Route("{treeId}/nodes")]
         public async Task<IActionResult> PutCheckNode([FromRoute] string treeId, [FromQuery] string checknode, CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
@@ -93,7 +93,7 @@ namespace team7_project.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<string>),200)]
         [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
-        [Route("trees/{treeId}/checknodes")]
+        [Route("{treeId}/nodes")]
         public async Task<IActionResult> GetCheckNodes([FromRoute] string treeId, CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
@@ -120,7 +120,7 @@ namespace team7_project.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 403)]
-        [Route("trees/{treeId}/edit")]
+        [Route("{treeId}")]
         public async Task<IActionResult> EditTree([FromRoute] string treeId, [FromBody] Client.Models.Trees.TreeCreationInfo treeEditInfo, CancellationToken cancellationToken)
         {
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
@@ -147,7 +147,7 @@ namespace team7_project.Controllers
         /// <response code="201">Возвращает Id созданного дерева</response>
         [HttpPost]
         [ProducesResponseType(typeof(string), 201)]
-        [Route("create")]
+        [Route("")]
         public async Task<IActionResult> CreateTreeAsync([FromBody] Client.Models.Trees.TreeCreationInfo treeCreationInfo, CancellationToken cancellationToken)
         {
             //TODO: добавить всяккие проверочки на адекватность данных, но это потом
