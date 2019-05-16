@@ -64,6 +64,18 @@ namespace team7_project.Controllers
                 return BadRequest(error);
             }
 
+            if (!AuthValidator.Login(registrationInfo.Login, out var errorLogin))
+            {
+                var error = ServiceErrorResponses.InvalidLoginOrPassword(errorLogin);
+                return BadRequest(error);
+            }
+
+            if (!AuthValidator.Password(registrationInfo.Password, out var errorPassword))
+            {
+                var error = ServiceErrorResponses.InvalidLoginOrPassword(errorPassword);
+                return BadRequest(error);
+            }
+
             var creationInfo = new UserCreationInfo(registrationInfo.Login, Auth.AuthHash.GetHashPassword(registrationInfo.Password));
 
             User user = null;

@@ -136,5 +136,21 @@ namespace team7_project.Errors
             };
             return error;
         }
+        
+        public static ServiceErrorResponse InvalidLoginOrPassword(string errorMessage)
+        {
+            var error = new ServiceErrorResponse
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Error = new ServiceError
+                {
+                    Code = ServiceErrorCodes.BadRequest,
+                    Message = errorMessage,
+                    Target = "authValidator"
+                }
+            };
+            return error;
+        }
+        
     }
 }
