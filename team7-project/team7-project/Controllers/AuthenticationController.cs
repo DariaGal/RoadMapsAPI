@@ -101,7 +101,7 @@ namespace team7_project.Controllers
             Response.Cookies.Append(
                 "auth",
                 new AuthTokenAnswer { AccessToken = encodedJwt }.AccessToken,
-                new CookieOptions { HttpOnly = true, Domain = domain, MaxAge = new TimeSpan(1, 0, 0, 0, 0) }
+                new CookieOptions {Domain = domain, MaxAge = new TimeSpan(1, 0, 0, 0, 0) }
             );
 
             return Ok(new AuthTokenAnswer
