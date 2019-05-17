@@ -95,11 +95,13 @@ namespace team7_project.Controllers
         };
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(JWT.GetJWT(claims, signingEncodingKey));
+            
+            var domain = Environment.GetEnvironmentVariable("CookieOptions_Domain");
 
             Response.Cookies.Append(
                 "auth",
                 new AuthTokenAnswer { AccessToken = encodedJwt }.AccessToken,
-                new CookieOptions { HttpOnly = true }
+                new CookieOptions { HttpOnly = true, Domain = domain }
             );
 
             return Ok(new AuthTokenAnswer
