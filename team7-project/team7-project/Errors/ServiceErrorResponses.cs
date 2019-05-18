@@ -46,6 +46,22 @@ namespace team7_project.Errors
             return error;
         }
 
+        public static ServiceErrorResponse WrongPassword()
+        {
+            var error = new ServiceErrorResponse
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Error = new ServiceError
+                {
+                    Code = ServiceErrorCodes.BadRequest,
+                    Message = $"Wrong password",
+                    Target = "user"
+                }
+            };
+
+            return error;
+        }
+
         public static ServiceErrorResponse NotEnoughUserData()
         {
             var error = new ServiceErrorResponse

@@ -18,5 +18,17 @@ namespace team7_project.Auth
                 return hash;
             }
         }
+
+        public static bool CheckPassword(string password, string passwordHash)
+        {
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                var hashBytes = md5.ComputeHash(passwordBytes);
+                var hash = BitConverter.ToString(hashBytes);
+                return passwordHash.Equals(hash);
+            }
+        }
     }
 }
+

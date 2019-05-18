@@ -85,6 +85,12 @@ namespace team7_project.Controllers
                 return BadRequest(error);
             }
 
+            if(!Auth.AuthHash.CheckPassword(userInfo.Password,user.PasswordHash))
+            {
+                var error = ServiceErrorResponses.WrongPassword();
+                return BadRequest(error);
+            }
+
             var clientUser = UserConverter.Convert(user);
 
             var claims = new Claim[]
