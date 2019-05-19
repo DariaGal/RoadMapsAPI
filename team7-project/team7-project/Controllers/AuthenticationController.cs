@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Http;
 namespace team7_project.Controllers
 {
     [Produces("application/json")]
-    [Route("api/auth/signin")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthenticationController : Controller
     {
@@ -56,6 +56,7 @@ namespace team7_project.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(AuthTokenAnswer), 200)]
         [ProducesResponseType(typeof(Client.Models.Errors.ServiceErrorResponse), 400)]
+        [Route("signin")]
         public async Task<IActionResult> GenerateToken(
             [FromBody]Client.Models.Users.UserRegistrationInfo userInfo,
             [FromServices] IJwtSigningEncodingKey signingEncodingKey,
@@ -112,6 +113,25 @@ namespace team7_project.Controllers
             {
                 AccessToken = encodedJwt
             });
+        }
+
+        /// <summary>
+        /// Выход
+        /// </summary>   
+        /// <response code="200"></response>  
+        [Authorize]
+        [HttpGet]
+        [Route("signout")]
+        public IActionResult Signout(
+            [FromServices] IJwtSigningEncodingKey signingEncodingKey,
+            CancellationToken cancellationToken)
+        {
+            Response.Cookies.Append(
+                "auth",
+                "",
+                new CookieOptions { MaxAge = new TimeSpan(0, 0, 0, 0, 0), SameSite = SameSiteMode.None }
+            );
+            return Ok();
         }
     }
 }
