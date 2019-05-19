@@ -36,7 +36,7 @@ namespace team7_project.Controllers
         /// <response code="400">Если дерево по указанному индексу отсутствует</response>  
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(Client.Models.Trees.Tree), 201)]
+        [ProducesResponseType(typeof(Client.Models.Trees.Tree), 200)]
         [ProducesResponseType(400)]
         [Route("{treeId}", Name = "GetTreeRoute")]
         public async Task<IActionResult> GetTreeAsync([FromRoute] string treeId, CancellationToken cancellationToken)
@@ -58,9 +58,7 @@ namespace team7_project.Controllers
 
             var clientTree = TreeConverter.Convert(tree,user.Login);
 
-            var clientTreeOutIndo = new Client.Models.Trees.TreeInfo(clientTree);
-
-            return Ok(clientTreeOutIndo);
+            return Ok(clientTree);
         }
 
         /// <summary>
