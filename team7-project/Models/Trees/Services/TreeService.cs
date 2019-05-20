@@ -180,7 +180,7 @@ namespace Models.Trees.Services
             var filter = new FilterDefinitionBuilder<Tree>().In(x => x.Id, treesId);
             var find = await trees.FindAsync(filter);
             var listOfTree = await find.ToListAsync();
-            
+
             var findResultUsers = await users.FindAsync(Builders<User>.Filter.Empty);
             var allUsers = await findResultUsers.ToListAsync();
 
@@ -286,12 +286,13 @@ namespace Models.Trees.Services
             var findTreeResult = await trees.FindAsync(x => x.Id == treeId);
             var tree = await findTreeResult.FirstOrDefaultAsync();
 
-            if(userId != tree.AuthorId)
+            if (userId != tree.AuthorId)
             {
                 throw new UserDoesNotHavePermissionToEditTree(treeId, userId.ToString());
             }
 
-            var newTree = new Tree {
+            var newTree = new Tree
+            {
                 Id = treeId,
                 AuthorId = tree.AuthorId,
                 Description = treeEditInfo.Description,
@@ -310,19 +311,19 @@ namespace Models.Trees.Services
             {
                 throw new ArgumentNullException(nameof(query));
             }
-            
+
             cancellationToken.ThrowIfCancellationRequested();
 
             FilterDefinition<Tree> filter = FilterDefinition<Tree>.Empty;
 
-            if(query.Tags != null)
+            if (query.Tags != null)
             {
                 filter = filter & Builders<Tree>.Filter.AnyIn(x => x.Tags, query.Tags);
             }
 
-            if(query.Title != null)
+            if (query.Title != null)
             {
-                var pattern = @"\w*"+query.Title+@"\w*";
+                var pattern = @"\w*" + query.Title + @"\w*";
                 var regex = new Regex(pattern, RegexOptions.IgnoreCase);
                 filter = filter & Builders<Tree>.Filter.Regex(x => x.Title, new BsonRegularExpression(regex));
             }
@@ -330,22 +331,22 @@ namespace Models.Trees.Services
             var findResultTrees = await trees.FindAsync(filter);
             var treesList = await findResultTrees.ToListAsync();
 
-            if(query.Offset != null)
+            if (query.Offset != null)
             {
                 treesList.Skip(query.Offset.Value);
             }
 
-            if(query.Limit != null)
+            if (query.Limit != null)
             {
                 treesList.Take(query.Limit.Value);
             }
-            
+
             var findResultUsers = await users.FindAsync(Builders<User>.Filter.Empty);
             var usersList = await findResultUsers.ToListAsync();
 
             var treesInfoList = new List<TreeInfo>();
 
-            foreach(var tree in treesList)
+            foreach (var tree in treesList)
             {
                 var author = usersList.Find(x => x.Id == tree.AuthorId);
                 treesInfoList.Add(
@@ -359,6 +360,56 @@ namespace Models.Trees.Services
                     });
             }
             return treesInfoList;
+        }
+
+        public async Task RemoveTreeAsync(string treeId, Guid userId, CancellationToken cancellationToken)
+        {
+            if (treeId == null)
+            {
+                throw new ArgumentNullException(nameof(treeId));
+            }
+
+            var findTreeResult = await trees.FindAsync(x => x.Id == treeId);
+            var tree = await findTreeResult.FirstOrDefaultAsync();
+
+            if (tree == null)
+            {
+                throw new TreeNotFoundException(treeId);
+            }
+
+            if (userId != tree.AuthorId)
+            {
+                throw new UserDoesNotHavePermissionToEditTree(treeId, userId.ToString());
+            }
+            
+            var update = Builders<UserTreesCheck>.Update.PullFilter(x => x.TreeCkeck, f => f.Id == treeId);
+
+            await userTreesCheck.UpdateManyAsync(FilterDefinition<UserTreesCheck>.Empty, update);
+
+            await trees.FindOneAndDeleteAsync(t => t.Id == treeId);
+        }
+
+        public async Task RemoveTreeFromProfileAsync(string treeId, Guid userId, CancellationToken cancellationToken)
+        {
+            if (treeId == null)
+            {
+                throw new ArgumentNullException(nameof(treeId));
+            }
+
+            var findTreeResult = await trees.FindAsync(x => x.Id == treeId);
+            var tree = await findTreeResult.FirstOrDefaultAsync();
+
+            if (tree == null)
+            {
+                throw new TreeNotFoundException(treeId);
+            }
+
+            if (userId != tree.AuthorId)
+            {
+                throw new UserDoesNotHavePermissionToEditTree(treeId, userId.ToString());
+            }
+
+            await trees.FindOneAndDeleteAsync(t => t.Id == treeId);
         }
     }
 }

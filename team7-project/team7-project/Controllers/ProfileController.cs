@@ -187,5 +187,29 @@ namespace team7_project.Controllers
 
             return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
         }
+
+        /// <summary>
+        /// Создание дерева
+        /// </summary>  
+        /// <param name="treeCreationInfo"> </param> 
+        /// <returns>Id дерева</returns>
+        /// <response code="201">Возвращает Id созданного дерева</response>
+        [HttpDelete]
+        [ProducesResponseType(typeof(string), 201)]
+        [Route("")]
+        public async Task<IActionResult> RemoveTreeAsync([FromRoute] string treeId, CancellationToken cancellationToken)
+        {
+            //TODO: добавиРть всяккие проверочки на адекватность данных, но это потом
+
+            var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
+            
+
+            var routeParams = new Dictionary<string, object>
+            {
+                { "treeId", treeId }
+            };
+
+            return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
+        }
     }
 }
