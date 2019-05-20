@@ -42,9 +42,10 @@ namespace Models.Trees.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
+            var treeId = Guid.NewGuid().ToString();
             var tree = new Tree
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = treeId,
                 AuthorId = authorId,
                 Title = creationInfo.Title,
                 Description = creationInfo.Description,
@@ -56,6 +57,7 @@ namespace Models.Trees.Services
             InsertOneOptions options = null;
             await trees.InsertOneAsync(tree, options, cancellationToken);
 
+            await AppendTreeToUserAsync(authorId, treeId, cancellationToken);
             return tree.Id;
         }
 
@@ -381,7 +383,7 @@ namespace Models.Trees.Services
             {
                 throw new UserDoesNotHavePermissionToEditTree(treeId, userId.ToString());
             }
-            
+
             var update = Builders<UserTreesCheck>.Update.PullFilter(x => x.TreeCkeck, f => f.Id == treeId);
 
             await userTreesCheck.UpdateManyAsync(FilterDefinition<UserTreesCheck>.Empty, update);
