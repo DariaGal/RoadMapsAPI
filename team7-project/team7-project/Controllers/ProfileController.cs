@@ -189,27 +189,34 @@ namespace team7_project.Controllers
         }
 
         /// <summary>
-        /// Создание дерева
+        /// Удаление дерева
         /// </summary>  
-        /// <param name="treeCreationInfo"> </param> 
-        /// <returns>Id дерева</returns>
-        /// <response code="201">Возвращает Id созданного дерева</response>
+        /// <param name="treeId"> </param> 
+        /// <response code="200">Ok</response>
         [HttpDelete]
-        [ProducesResponseType(typeof(string), 201)]
-        [Route("")]
+        [ProducesResponseType(typeof(string), 200)]
+        [Route("trees/{treeId}")]
         public async Task<IActionResult> RemoveTreeAsync([FromRoute] string treeId, CancellationToken cancellationToken)
         {
-            //TODO: добавиРть всяккие проверочки на адекватность данных, но это потом
 
             var userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
-            
 
-            var routeParams = new Dictionary<string, object>
+            try
             {
-                { "treeId", treeId }
-            };
+                await trees.RemoveTreeAsync(treeId, userId, cancellationToken);
+            }
+            catch(TreeNotFoundException)
+            {
+                var error = ServiceErrorResponses.TreeNotFound(treeId);
+                return BadRequest(error);
+            }
+            catch(UserDoesNotHavePermissionToEditTree)
+            {
+                var error = ServiceErrorResponses.UserCannotEditTree(treeId, userId.ToString());
+                return StatusCode(StatusCodes.Status403Forbidden, error);
+            }
 
-            return CreatedAtRoute("GetTreeRoute", routeParams, treeId);
+            return Ok();
         }
     }
 }
