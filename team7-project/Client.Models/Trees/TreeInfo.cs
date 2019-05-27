@@ -31,6 +31,8 @@ namespace Client.Models.Trees
         /// </summary>
         public List<string> Tags { get; set; }
 
+        public bool AddedToProfile { get; set; }
+
         public TreeInfo(Tree tree)
         {
             Id = tree.Id;

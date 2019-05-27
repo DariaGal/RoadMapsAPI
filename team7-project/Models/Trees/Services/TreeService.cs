@@ -307,7 +307,7 @@ namespace Models.Trees.Services
             await trees.FindOneAndReplaceAsync(x => x.Id == treeId, newTree, cancellationToken: cancellationToken);
         }
 
-        public async Task<IReadOnlyList<TreeInfo>> SearchTreesAsync(TreeInfoSearchQuery query, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<TreeInfo>> SearchTreesAsync(Guid userId, TreeInfoSearchQuery query, CancellationToken cancellationToken)
         {
             if (query == null)
             {
@@ -345,12 +345,24 @@ namespace Models.Trees.Services
 
             var findResultUsers = await users.FindAsync(Builders<User>.Filter.Empty);
             var usersList = await findResultUsers.ToListAsync();
+        
+           
+            var findResultUserTrees = await userTreesCheck.FindAsync(x => x.UserId == userId);
+            var usertrees = await findResultUserTrees.FirstOrDefaultAsync();
+            
 
             var treesInfoList = new List<TreeInfo>();
 
             foreach (var tree in treesList)
             {
                 var author = usersList.Find(x => x.Id == tree.AuthorId);
+                var addedToProfile = false;
+
+                if(usertrees != null)
+                {
+                    addedToProfile = usertrees.TreeCkeck.FirstOrDefault(x => x.Id == tree.Id) != null;
+                }
+
                 treesInfoList.Add(
                     new TreeInfo
                     {
@@ -358,7 +370,9 @@ namespace Models.Trees.Services
                         Author = author.Login,
                         Title = tree.Title,
                         Description = tree.Description,
-                        Tags = tree.Tags
+                        Tags = tree.Tags,
+                        AddedToProfile = addedToProfile
+                        
                     });
             }
             return treesInfoList;

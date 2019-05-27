@@ -18,7 +18,7 @@ namespace Models.Trees.Services
         Task CheckNode(Guid userId, string treeId, string nodeId, CancellationToken cancellationToken);
         Task<IReadOnlyList<string>> GetCheckNodes(Guid userId, string treeId, CancellationToken cancellationToken);
         Task UpdateTreeAsync(string treeId, Guid userId, Models.Trees.TreeCreationInfo treeEditInfo, CancellationToken cancellationToken);
-        Task<IReadOnlyList<TreeInfo>> SearchTreesAsync(TreeInfoSearchQuery query, CancellationToken cancellationToken);
+        Task<IReadOnlyList<TreeInfo>> SearchTreesAsync(Guid userId, TreeInfoSearchQuery query, CancellationToken cancellationToken);
         Task RemoveTreeAsync(string treeId, Guid userId, CancellationToken cancellationToken);
     }
 }

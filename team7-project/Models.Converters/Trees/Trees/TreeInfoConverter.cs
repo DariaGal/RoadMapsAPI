@@ -7,9 +7,8 @@ namespace Models.Converters.Trees
     using Client = Client.Models.Trees;
     using Model = Models.Trees;
 
-    public class TreeOutInfoConverter
+    public class TreeInfoConverter
     {
-
         public static Client.TreeInfo Convert(Model.TreeInfo treeOutInfo)
         {
             if (treeOutInfo == null)
@@ -23,7 +22,8 @@ namespace Models.Converters.Trees
                 Author = treeOutInfo.Author,
                 Description = treeOutInfo.Description,
                 Tags = treeOutInfo.Tags,
-                Title = treeOutInfo.Title
+                Title = treeOutInfo.Title,
+                AddedToProfile = treeOutInfo.AddedToProfile
             };
 
             return clientTreeOutInfo;
@@ -42,7 +42,8 @@ namespace Models.Converters.Trees
                 Author = clientTreeOutInfo.Author,
                 Description = clientTreeOutInfo.Description,
                 Tags = clientTreeOutInfo.Tags,
-                Title = clientTreeOutInfo.Title
+                Title = clientTreeOutInfo.Title,
+                AddedToProfile = clientTreeOutInfo.AddedToProfile
             };
 
             return treeOutInfo;

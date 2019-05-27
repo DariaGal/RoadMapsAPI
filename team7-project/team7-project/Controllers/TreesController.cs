@@ -94,10 +94,16 @@ namespace team7_project.Controllers
             cancellationToken.ThrowIfCancellationRequested();
 
             var modelQuery = TreeInfoSearchQueryConverter.Convert(query);
+            Guid userId = Guid.Empty;
+            if (User.Claims.FirstOrDefault() != null)
+            {
+                userId = Guid.Parse(User.Claims.First(c => c.Type == "Id").Value);
+            }
+            var info = await trees.SearchTreesAsync(userId, modelQuery, cancellationToken);
 
-            var info = await trees.SearchTreesAsync(modelQuery, cancellationToken);
+            var treeinfo = info.Select(x => TreeInfoConverter.Convert(x));
 
-            return Ok(info);
+            return Ok(treeinfo);
         }
 
         /// <summary>
