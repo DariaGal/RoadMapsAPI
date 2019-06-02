@@ -17,5 +17,9 @@ namespace Models.Trees.UserTrees
         public string Description { get; set; }
 
         public bool EnableEdit { get; set; }
+
+        public List<string> CheckedNodes { get; set; }
+
+        public int AllNodesCount { get; set; }
     }
 }

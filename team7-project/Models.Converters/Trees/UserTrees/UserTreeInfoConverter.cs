@@ -23,7 +23,9 @@ namespace Models.Converters.Trees
                 Author = modelTreeInfo.Author,
                 Description = modelTreeInfo.Description,
                 Tags = modelTreeInfo.Tags,
-                EnableEdit = modelTreeInfo.EnableEdit
+                EnableEdit = modelTreeInfo.EnableEdit,
+                CheckedNodes = modelTreeInfo.CheckedNodes,
+                AllNodesCount = modelTreeInfo.AllNodesCount
             };
 
             return clientTreeInfo;

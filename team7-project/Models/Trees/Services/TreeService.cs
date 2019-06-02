@@ -190,6 +190,9 @@ namespace Models.Trees.Services
             {
                 var author = allUsers.Find(x => x.Id == tree.AuthorId);
                 var enableEdit = userId == author.Id;
+
+                var checkedNodes = userTreesInfo.TreeCkeck.FirstOrDefault(x => x.Id == tree.Id).CheckedNodes;
+                var nodeCount = tree.Nodes.Count;
                 userTreeInfo.Add(
                     new UserTreeInfo
                     {
@@ -198,7 +201,9 @@ namespace Models.Trees.Services
                         Title = tree.Title,
                         Description = tree.Description,
                         Tags = tree.Tags,
-                        EnableEdit = enableEdit
+                        EnableEdit = enableEdit,
+                        CheckedNodes = checkedNodes,
+                        AllNodesCount = nodeCount
                     });
             }
 
