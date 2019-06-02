@@ -250,10 +250,20 @@ namespace Models.Trees.Services
                 throw new NodeNotFoundException(nodeId, treeId);
             }
 
-            var update = Builders<UserTreesCheck>.Update.Push(model => model.TreeCkeck[-1].CheckedNodes, nodeId);
+            if (treeCheck.CheckedNodes.Contains(nodeId))
+            {
+                treeCheck.CheckedNodes.Remove(nodeId);
+                var pull = Builders<UserTreesCheck>.Update.PullFilter(x => x.TreeCkeck, t => t.Id == treeId);
+                var push = Builders<UserTreesCheck>.Update.Push(x => x.TreeCkeck, treeCheck);
+                var resPull = await userTreesCheck.UpdateOneAsync(filterUser, pull);
+                var resPush = await userTreesCheck.UpdateOneAsync(filterUser, push);
+            }
+            else
+            {
+                var update = Builders<UserTreesCheck>.Update.Push(model => model.TreeCkeck[-1].CheckedNodes, nodeId);
 
-            var result = await userTreesCheck.UpdateOneAsync(filter, update);
-
+                var result = await userTreesCheck.UpdateOneAsync(filter, update);
+            }
             return;
         }
 
