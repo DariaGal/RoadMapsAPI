@@ -2,7 +2,7 @@
 
 **Визуализация умений в виде графа**
 
-Backend - https://team7-test.azurewebsites.net
+Backend Web API
 
 ## Для чего это?
 - Вы визуализируете какие-либо навыки в виде графа
